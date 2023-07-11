@@ -1,4 +1,4 @@
-package currencyExchange.controllers;
+package currencyExchange.controller;
 
 import currencyExchange.enums.WindowType;
 import currencyExchange.helpers.MsgHelper;

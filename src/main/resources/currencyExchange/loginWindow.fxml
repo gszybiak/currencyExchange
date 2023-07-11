@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.control.Label?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="currencyExchange.controllers.LoginWindowController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="currencyExchange.controller.LoginWindowController">
     <children>
         <Label layoutX="77.0" layoutY="30.0" text="Wprowadź dane logowania" textAlignment="CENTER"/>
         <TextField fx:id="txtUser" layoutX="77.0" layoutY="57.0" promptText="nazwa użytkownika" />
