@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="currencyExchange.controller.StatisticsWindowController">
+    <children>
+        <ImageView fitHeight="150.0" fitWidth="400.0" layoutX="550.0" layoutY="100.0">
+            <image>
+                <Image url="@kantor.png" />
+            </image>
+        </ImageView>
+        <VBox layoutX="430.0" layoutY="305.0" spacing="10" alignment="CENTER">
+            <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Waluta: " fx:id="txtCurrency" textFill="#000000"/>
+            <ComboBox fx:id="cbCurrency">
+            <items>
+                <FXCollections fx:factory="observableArrayList">
+                    <String fx:value="EURO" />
+                    <String fx:value="DOLAR" />
+                    <String fx:value="FUNT" />
+                </FXCollections>
+            </items>
+            </ComboBox>
+            <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Kurs: " fx:id="txtRate" textFill="#000000"/>
+            <TextField fx:id="txtCurrencyRate" disable="true" promptText="Wartość" alignment="CENTER" prefWidth="400.0" />
+            <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Ilość:" fx:id="txtQuantity" textFill="#000000"/>
+            <TextField fx:id="txtQuantityCurrency" disable="true" promptText="Ilość" alignment="CENTER" prefWidth="400.0" />
+            <HBox spacing="10" alignment="CENTER">
+                <TextField fx:id="txtValueCurrency" disable="true" promptText="Wartość" alignment="CENTER" prefWidth="400.0" />
+                <Button fx:id="btnBuyorSell" maxHeight="18" prefHeight="18" prefWidth="90" style="-fx-font-size: 16px; -fx-font-weight: bold;" onAction="#btnBuyOrSellClicked" mnemonicParsing="false" text="Kup/Sprzedaj" />
+            </HBox>
+        </VBox>
+    </children>
+</Pane>

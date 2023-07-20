@@ -52,6 +52,7 @@ public class WindowHelper {
         } catch (Exception e) {
             MsgHelper.showError(String.format("Błąd otwierania ekranu %s", windowType.getViewPath()), e.getLocalizedMessage());
             windowHelperLog.error(String.format("Błąd otwierania okna %s", windowType.getViewPath()), new Exception(e.getMessage()));
+            e.printStackTrace();
         }
     }
 

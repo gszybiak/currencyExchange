@@ -1,59 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="currencyExchange.controller.MainWindowController">
     <children>
-        <ImageView fitHeight="48.0" fitWidth="300.0" layoutX="480.0" layoutY="100.0">
+        <ImageView fitHeight="150.0" fitWidth="400.0" layoutX="550.0" layoutY="100.0">
             <image>
                 <Image url="@kantor.png" />
             </image>
         </ImageView>
-        <Label layoutX="50.0" layoutY="600.0" style="-fx-font-weight: bold" text="Użytkownik" fx:id="txtUser" textFill="#000000">
+        <Label layoutX="1020.0" layoutY="30.0" style="-fx-font-weight: bold" text="Użytkownik:" fx:id="txtUser" textFill="#000000">
             <font>
                 <Font size="20.0" />
             </font>
         </Label>
-        <VBox layoutX="920.0" layoutY="305.0" spacing="10">
-            <Label layoutX="50.0" layoutY="600.0" style="-fx-font-weight: bold" text="Statystyki:" fx:id="txtStatistics" textFill="#000000">
-                <font>
-                    <Font size="20.0" />
-                </font>
-            </Label>
-<!--            <HBox layoutX="845" layoutY="650" spacing="10">-->
-<!--                <FontAwesomeIconView glyphName="EURO" />-->
-<!--                <Label layoutX="50.0" layoutY="600.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)  SUMA:" fx:id="txtInfoPatternEuro" textFill="#000000"/>-->
-<!--                <Label layoutX="50.0" layoutY="600.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)" fx:id="txtInfoEuro" textFill="#000000"/>-->
-<!--            </HBox>-->
-<!--            <HBox layoutX="845" layoutY="650" spacing="10">-->
-<!--                <FontAwesomeIconView glyphName="DOLLAR" />-->
-<!--                <Label layoutX="50.0" layoutY="600.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)  SUMA:" fx:id="txtInfoPatternDollar" textFill="#000000"/>-->
-<!--                <Label layoutX="50.0" layoutY="600.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)" fx:id="txtInfoDollar" textFill="#000000"/>-->
-<!--            </HBox>-->
-<!--            <HBox layoutX="845" layoutY="650" spacing="10">-->
-<!--                <FontAwesomeIconView glyphName="POUND" />-->
-<!--                <Label layoutX="50.0" layoutY="600.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)  SUMA:" fx:id="txtInfoPatternPound" textFill="#000000"/>-->
-<!--                <Label layoutX="50.0" layoutY="600.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)" fx:id="txtInfoPound" textFill="#000000"/>-->
-<!--            </HBox>-->
+        <VBox layoutX="430.0" layoutY="305.0" spacing="10">
+            <Label alignment="CENTER_LEFT" layoutX="50.0" layoutY="600.0" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Statystyki:" fx:id="txtStatistics" textFill="#000000"/>
+            <HBox spacing="10" alignment="CENTER">
+                <Button fx:id="btnEuro" maxHeight="18" prefHeight="18" prefWidth="90" style="-fx-font-size: 16px; -fx-font-weight: bold;" onAction="#btnEuroClicked" mnemonicParsing="false" text="EURO" />
+                <Label  style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)  SUMA:" fx:id="txtInfoPatternEuro" textFill="#000000"/>
+                <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)" fx:id="txtInfoEuro" textFill="#000000"/>
+            </HBox>
+            <HBox spacing="10" alignment="CENTER">
+                <Button fx:id="btnDollar" maxHeight="18" prefHeight="18" prefWidth="90" style="-fx-font-size: 16px; -fx-font-weight: bold;" onAction="#btnDollarClicked" mnemonicParsing="false" text="DOLLAR" />
+                <Label layoutX="50.0" layoutY="600.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)  SUMA:" fx:id="txtInfoPatternDollar" textFill="#000000"/>
+                <Label layoutX="50.0" layoutY="600.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)" fx:id="txtInfoDollar" textFill="#000000"/>
+            </HBox>
+            <HBox spacing="10" alignment="CENTER">
+                <Button fx:id="btnPound" maxHeight="18" prefHeight="18" prefWidth="90" style="-fx-font-size: 16px; -fx-font-weight: bold;" onAction="#btnPoundClicked" mnemonicParsing="false" text="POUND" />
+                <Label layoutX="50.0" layoutY="600.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)  SUMA:" fx:id="txtInfoPatternPound" textFill="#000000"/>
+                <Label layoutX="50.0" layoutY="600.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)" fx:id="txtInfoPound" textFill="#000000"/>
+            </HBox>
         </VBox>
-        <HBox layoutX="845" layoutY="650" spacing="10">
-            <Button fx:id="btnBuy" maxHeight="40" prefHeight="40" prefWidth="140" style="-fx-font-weight: bold" onAction="#btnBuyClicked" mnemonicParsing="false" text="KUP" >
-                <font>
-                    <Font size="20.0" />
-                </font>
+        <HBox layoutX="920.0" layoutY="305.0" spacing="10" >
+            <Button alignment="CENTER_RIGHT" fx:id="btnCopy"  maxHeight="20" prefHeight="20" prefWidth="20" style="-fx-font-size: 20px; -fx-font-weight: bold;" onAction="#btnCopyClicked" mnemonicParsing="false" >
+                <graphic>
+                    <ImageView fitHeight="24" fitWidth="24">
+                        <Image url="@copyIcon.png" />
+                    </ImageView>
+                </graphic>
             </Button>
-            <Button fx:id="btnSell" maxHeight="40" prefHeight="40" prefWidth="140" style="-fx-font-weight: bold" onAction="#btnSellClicked" mnemonicParsing="false" text="SPRZEDAJ" >
-                <font>
-                    <Font size="20.0" />
-                </font>
+            <Button alignment="CENTER_RIGHT" fx:id="btnMail" maxHeight="20" prefHeight="20" prefWidth="20" style="-fx-font-size: 20px; -fx-font-weight: bold;" onAction="#btnMailClicked" mnemonicParsing="false" >
+                <graphic>
+                    <ImageView fitHeight="24" fitWidth="24">
+                        <Image url="@iconMail.png" />
+                    </ImageView>
+                </graphic>
             </Button>
+        </HBox>
+        <HBox layoutX="600" layoutY="550" spacing="10">
+            <Button fx:id="btnBuy" maxHeight="40" prefHeight="40" prefWidth="140" style="-fx-font-size: 20px; -fx-font-weight: bold;" onAction="#btnBuyClicked" mnemonicParsing="false" text="KUP" />
+            <Button fx:id="btnSell" maxHeight="40" prefHeight="40" prefWidth="140" style="-fx-font-size: 20px; -fx-font-weight: bold;" onAction="#btnSellClicked" mnemonicParsing="false" text="SPRZEDAJ" />
         </HBox>
     </children>
 </Pane>

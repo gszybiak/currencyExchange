@@ -5,6 +5,10 @@ module currencyExchange {
     requires lombok;
     requires java.desktop;
     requires java.sql;
+    requires javafx.graphics;
+    requires de.jensd.fx.glyphs.commons;
+    requires de.jensd.fx.glyphs.controls;
+
 
     opens currencyExchange to javafx.fxml;
     exports currencyExchange;
