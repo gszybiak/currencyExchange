@@ -8,6 +8,8 @@ module currencyExchange {
     requires javafx.graphics;
     requires de.jensd.fx.glyphs.commons;
     requires de.jensd.fx.glyphs.controls;
+    requires java.mail;
+    requires activation;
 
 
     opens currencyExchange to javafx.fxml;

@@ -6,7 +6,7 @@ import javafx.event.ActionEvent;
 
 public class StatisticsWindowController {
 
-    public void btnBuyOrSellClicked(ActionEvent actionEvent) {
+    public void btnCalculateClicked(ActionEvent actionEvent) {
 
     }
 

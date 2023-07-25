@@ -1,10 +1,14 @@
 package currencyExchange.controller;
 
+import currencyExchange.email.SendEmail;
 import currencyExchange.enums.WindowType;
 import currencyExchange.helpers.WindowHelper;
 import javafx.event.ActionEvent;
+import javafx.scene.control.TextInputDialog;
 
 import java.awt.*;
+import java.util.Base64;
+import java.util.Optional;
 
 public class MainWindowController {
 
@@ -12,11 +16,13 @@ public class MainWindowController {
     Dimension screenSize = toolkit.getScreenSize();
 
     public void btnBuyClicked(ActionEvent actionEvent) {
+        ExchangeWindowController.buyMode = true;
         WindowType.EXCHANGE_WINDOW.setTitle("Kup walutę");
         WindowHelper.openWindow(WindowType.EXCHANGE_WINDOW, screenSize.width, screenSize.height);
     }
 
     public void btnSellClicked(ActionEvent actionEvent) {
+        ExchangeWindowController.buyMode = false;
         WindowType.EXCHANGE_WINDOW.setTitle("Sprzedaj walutę");
         WindowHelper.openWindow(WindowType.EXCHANGE_WINDOW, screenSize.width, screenSize.height);
     }
@@ -51,26 +57,18 @@ public class MainWindowController {
      * Metoda Wyślij maila
      */
     public void btnMailClicked(ActionEvent actionEvent) {
-//        boolean correct = true;
-//        if (calendarRent.getValue() == null) {
-//            MsgHelper.showError("Niepoprawne dane", "Uzupełnij poprawnie datę oddania książki");
-//            correct = false;
-//        }
-//        if (correct) {
-//            TextInputDialog dialog = new TextInputDialog("Adres email");
-//            dialog.setTitle("Wysyłanie email");
-//            dialog.setHeaderText("Podaj email:");
-//            dialog.setContentText("Email:");
-//            Optional<String> result = dialog.showAndWait();
-//
-//            result.ifPresent(name -> {
-//                String encodedString = Base64.getEncoder().encodeToString(name.getBytes());
-//                byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
-//                String decodedString = new String(decodedBytes);
-//                SendEmail.sendInfoRend(decodedString, calendarRent.getValue(), bookList.get(numberBook - 1));
-//            });
-//            btnRent.setVisible(false);
-//            btnReturn.setVisible(true);
-//        }
+
+            TextInputDialog dialog = new TextInputDialog("Adres email");
+            dialog.setTitle("Wysyłanie email");
+            dialog.setHeaderText("Podaj email:");
+            dialog.setContentText("Email:");
+            Optional<String> result = dialog.showAndWait();
+
+            result.ifPresent(name -> {
+                String encodedString = Base64.getEncoder().encodeToString(name.getBytes());
+                byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
+                String decodedString = new String(decodedBytes);
+                SendEmail.sendEmail(decodedString);
+            });
     }
 }

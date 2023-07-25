@@ -11,6 +11,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
+<?import javafx.scene.control.CheckBox?>
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="currencyExchange.controller.StatisticsWindowController">
     <children>
         <ImageView fitHeight="150.0" fitWidth="400.0" layoutX="550.0" layoutY="100.0">
@@ -18,25 +19,27 @@
                 <Image url="@kantor.png" />
             </image>
         </ImageView>
-        <VBox layoutX="430.0" layoutY="305.0" spacing="10" alignment="CENTER">
-            <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Waluta: " fx:id="txtCurrency" textFill="#000000"/>
-            <ComboBox fx:id="cbCurrency">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="EURO" />
-                    <String fx:value="DOLAR" />
-                    <String fx:value="FUNT" />
-                </FXCollections>
-            </items>
-            </ComboBox>
-            <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Kurs: " fx:id="txtRate" textFill="#000000"/>
-            <TextField fx:id="txtCurrencyRate" disable="true" promptText="Wartość" alignment="CENTER" prefWidth="400.0" />
-            <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Ilość:" fx:id="txtQuantity" textFill="#000000"/>
-            <TextField fx:id="txtQuantityCurrency" disable="true" promptText="Ilość" alignment="CENTER" prefWidth="400.0" />
+        <VBox layoutX="550.0" layoutY="305.0" prefWidth="400" spacing="10" alignment="CENTER">
+            <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Zakres dni: " fx:id="txtRange" textFill="#000000"/>
             <HBox spacing="10" alignment="CENTER">
-                <TextField fx:id="txtValueCurrency" disable="true" promptText="Wartość" alignment="CENTER" prefWidth="400.0" />
-                <Button fx:id="btnBuyorSell" maxHeight="18" prefHeight="18" prefWidth="90" style="-fx-font-size: 16px; -fx-font-weight: bold;" onAction="#btnBuyOrSellClicked" mnemonicParsing="false" text="Kup/Sprzedaj" />
+            <ComboBox fx:id="cbCurrency" prefWidth="250">
+                <items>
+                    <FXCollections fx:factory="observableArrayList">
+                        <String fx:value="1 dzień" />
+                        <String fx:value="5 dni" />
+                        <String fx:value="10 dni" />
+                        <String fx:value="30 dni" />
+                    </FXCollections>
+                </items>
+            </ComboBox>
+            <Button fx:id="btnCalculate" maxHeight="18" prefHeight="18" prefWidth="150" style="-fx-font-size: 16px; -fx-font-weight: bold;" onAction="#btnCalculateClicked" mnemonicParsing="false" text="Przelicz" />
             </HBox>
+        </VBox>
+        <VBox layoutX="1050.0" layoutY="305.0" prefWidth="400" spacing="10" styleClass="big-checkbox" >
+            <CheckBox fx:id="chbMin" text="min" />
+            <CheckBox fx:id="chbMax" text="max" />
+            <CheckBox fx:id="chbAverage" text="średnia" />
+            <CheckBox fx:id="chbDays" text="dni" />
         </VBox>
     </children>
 </Pane>
