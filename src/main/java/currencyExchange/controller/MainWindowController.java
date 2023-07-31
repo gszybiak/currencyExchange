@@ -4,7 +4,9 @@ import currencyExchange.email.SendEmail;
 import currencyExchange.enums.WindowType;
 import currencyExchange.helpers.WindowHelper;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextInputDialog;
+import javafx.stage.Stage;
 
 import java.awt.*;
 import java.util.Base64;
@@ -12,6 +14,7 @@ import java.util.Optional;
 
 public class MainWindowController {
 
+    public Button btnClose;
     Toolkit toolkit = Toolkit.getDefaultToolkit();
     Dimension screenSize = toolkit.getScreenSize();
 
@@ -22,7 +25,7 @@ public class MainWindowController {
     }
 
     public void btnLogOut(ActionEvent actionEvent) {
-        //jak zamknąć mainWindow
+        ((Stage) btnClose.getScene().getWindow()).close();
         WindowHelper.openWindow(WindowType.LOGIN_WINDOW);
     }
 

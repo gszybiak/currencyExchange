@@ -18,7 +18,7 @@
                 </ImageView>
             </graphic>
         </Button>
-        <Label layoutX="1020.0" layoutY="30.0" style="-fx-font-weight: bold" text="Użytkownik:" fx:id="txtUser" textFill="#000000">
+        <Label layoutX="1020.0" layoutY="30.0" style="-fx-font-weight: bold" text="Użytkownik:" fx:id="txtUsers" textFill="#000000">
             <font>
                 <Font size="20.0" />
             </font>
