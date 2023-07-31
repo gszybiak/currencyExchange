@@ -21,6 +21,11 @@ public class MainWindowController {
         WindowHelper.openWindow(WindowType.EXCHANGE_WINDOW, screenSize.width, screenSize.height);
     }
 
+    public void btnLogOut(ActionEvent actionEvent) {
+        //jak zamknąć mainWindow
+        WindowHelper.openWindow(WindowType.LOGIN_WINDOW);
+    }
+
     public void btnSellClicked(ActionEvent actionEvent) {
         ExchangeWindowController.buyMode = false;
         WindowType.EXCHANGE_WINDOW.setTitle("Sprzedaj walutę");

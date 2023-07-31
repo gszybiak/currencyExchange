@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="currencyExchange.controller.MainWindowController">
     <children>
         <ImageView fitHeight="150.0" fitWidth="400.0" layoutX="550.0" layoutY="100.0">
@@ -13,6 +11,13 @@
                 <Image url="@kantor.png" />
             </image>
         </ImageView>
+        <Button fx:id="btnClose" layoutX="1100.0" layoutY="60.0" maxHeight="20" prefHeight="20" prefWidth="20" style="-fx-font-size: 20px; -fx-font-weight: bold;" onAction="#btnLogOut" mnemonicParsing="false" >
+            <graphic>
+                <ImageView fitHeight="24" fitWidth="24">
+                    <Image url="@logOutIcon.png" />
+                </ImageView>
+            </graphic>
+        </Button>
         <Label layoutX="1020.0" layoutY="30.0" style="-fx-font-weight: bold" text="Użytkownik:" fx:id="txtUser" textFill="#000000">
             <font>
                 <Font size="20.0" />
