@@ -1,6 +1,8 @@
 package currencyExchange.controller;
 
+import currencyExchange.enums.CurrencyType;
 import currencyExchange.helpers.ApiNbpHelper;
+import currencyExchange.helpers.TypeAndFormatHelper;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -16,7 +18,9 @@ public class ExchangeWindowController {
     public TextField txtQuantityCurrency;
     /* Wartość */
     public TextField txtValueCurrency;
+    /* Przycisk Kup/Sprzedaj */
     public Button btnBuyOrSell;
+    /* Flaga czy ekran otwarty w trybie Kup */
     public static boolean buyMode = false;
 
     public void initialize(){
@@ -28,20 +32,16 @@ public class ExchangeWindowController {
     }
 
     private void setRest(){
-        Double priceUsd = ApiNbpHelper.loadDataFromBank("usd");
-        Double priceEur = ApiNbpHelper.loadDataFromBank("eur");
-        Double priceGbp = ApiNbpHelper.loadDataFromBank("gbp");
-
         String currencyName = cbCurrency.getValue().toString();
         switch (currencyName) {
             case "EURO":
-                txtCurrencyRate.setText(Double.toString(priceEur));
+                txtCurrencyRate.setText(Double.toString(ApiNbpHelper.loadTodayDataFromBank(CurrencyType.DOLAR.getName())));
                 break;
             case "DOLAR":
-                txtCurrencyRate.setText(Double.toString(priceUsd));
+                txtCurrencyRate.setText(Double.toString(ApiNbpHelper.loadTodayDataFromBank(CurrencyType.EURO.getName())));
                 break;
             case "FUNT":
-                txtCurrencyRate.setText(Double.toString(priceGbp));
+                txtCurrencyRate.setText(Double.toString(ApiNbpHelper.loadTodayDataFromBank(CurrencyType.FUNT.getName())));
                 break;
             default:
                 break;
@@ -50,8 +50,9 @@ public class ExchangeWindowController {
 
     private void setValue(){
         if(!txtCurrencyRate.getText().isBlank() && !txtQuantityCurrency.getText().isBlank()) {
-            Double Value = Double.parseDouble(txtCurrencyRate.getText()) * Double.parseDouble(txtQuantityCurrency.getText());
-            txtValueCurrency.setText(Value.toString());
+            Double value = TypeAndFormatHelper.convertToDoubleWithFormatter(txtCurrencyRate.getText())
+                    * TypeAndFormatHelper.convertToDoubleWithFormatter(txtQuantityCurrency.getText());
+            txtValueCurrency.setText(value.toString());
         }
     }
 

@@ -18,24 +18,50 @@
         <VBox layoutX="550.0" layoutY="305.0" prefWidth="400" spacing="10" alignment="CENTER">
             <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Zakres dni: " fx:id="txtRange" textFill="#000000"/>
             <HBox spacing="10" alignment="CENTER">
-            <ComboBox fx:id="cbCurrency" prefWidth="250">
+            <ComboBox fx:id="cbRange" prefWidth="250">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="1 dzień" />
-                        <String fx:value="5 dni" />
-                        <String fx:value="10 dni" />
-                        <String fx:value="30 dni" />
+                        <String fx:value="1" />
+                        <String fx:value="5" />
+                        <String fx:value="10" />
+                        <String fx:value="30" />
                     </FXCollections>
                 </items>
             </ComboBox>
             <Button fx:id="btnCalculate" maxHeight="18" prefHeight="18" prefWidth="150" style="-fx-font-size: 16px; -fx-font-weight: bold;" onAction="#btnCalculateClicked" mnemonicParsing="false" text="Przelicz" />
             </HBox>
-        </VBox>
-        <VBox layoutX="1050.0" layoutY="305.0" prefWidth="400" spacing="10" styleClass="big-checkbox" >
-            <CheckBox fx:id="chbMin" text="min" />
-            <CheckBox fx:id="chbMax" text="max" />
-            <CheckBox fx:id="chbAverage" text="średnia" />
-            <CheckBox fx:id="chbDays" text="dni" />
+            <HBox spacing="10" alignment="TOP_LEFT">
+                <TextArea fx:id="txtStatisctics" editable="false" prefWidth="650" minHeight="100" styleClass="text-area-with-scroll"/>
+                <VBox alignment="CENTER_LEFT" layoutX="1050.0" layoutY="305.0" prefWidth="400" spacing="10" styleClass="big-checkbox" >
+                    <CheckBox fx:id="chbMin" text="min" />
+                    <CheckBox fx:id="chbMax" text="max" />
+                    <CheckBox fx:id="chbAvg" text="średnia" />
+                    <CheckBox fx:id="chbDays" text="dni" />
+                    <HBox spacing="5">
+                        <Button alignment="CENTER_RIGHT" fx:id="btnCopy"  maxHeight="20" prefHeight="20" prefWidth="20" style="-fx-font-size: 20px; -fx-font-weight: bold;" onAction="#btnCopyClicked" mnemonicParsing="false" >
+                        <graphic>
+                            <ImageView fitHeight="18" fitWidth="18">
+                                <Image url="@copyIcon.png" />
+                            </ImageView>
+                        </graphic>
+                        </Button>
+                        <Button alignment="CENTER_RIGHT" fx:id="btnSaveToFile"  maxHeight="20" prefHeight="20" prefWidth="20" style="-fx-font-size: 20px; -fx-font-weight: bold;" onAction="#btnSaveToFileClicked" mnemonicParsing="false" >
+                            <graphic>
+                                <ImageView fitHeight="18" fitWidth="18">
+                                    <Image url="@saveToFileIcon.png" />
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <Button alignment="CENTER_RIGHT" fx:id="btnMail" maxHeight="20" prefHeight="20" prefWidth="20" style="-fx-font-size: 20px; -fx-font-weight: bold;" onAction="#btnMailClicked" mnemonicParsing="false" >
+                        <graphic>
+                            <ImageView fitHeight="18" fitWidth="18">
+                                <Image url="@iconMail.png" />
+                            </ImageView>
+                        </graphic>
+                        </Button>
+                    </HBox>
+                </VBox>
+            </HBox>
         </VBox>
     </children>
 </Pane>

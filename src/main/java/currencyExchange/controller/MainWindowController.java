@@ -1,6 +1,7 @@
 package currencyExchange.controller;
 
 import currencyExchange.email.SendEmail;
+import currencyExchange.enums.CurrencyType;
 import currencyExchange.enums.WindowType;
 import currencyExchange.helpers.WindowHelper;
 import javafx.event.ActionEvent;
@@ -36,17 +37,20 @@ public class MainWindowController {
     }
 
     public void btnEuroClicked(ActionEvent actionEvent) {
+        StatisticsWindowController.currency = CurrencyType.EURO.getName();
         WindowType.STATISTICS_WINDOW.setTitle("Statystyki Euro");
         WindowHelper.openWindow(WindowType.STATISTICS_WINDOW, screenSize.width, screenSize.height);
 
     }
 
     public void btnDollarClicked(ActionEvent actionEvent) {
+        StatisticsWindowController.currency = CurrencyType.DOLAR.getName();
         WindowType.STATISTICS_WINDOW.setTitle("Statystyki Dollar");
         WindowHelper.openWindow(WindowType.STATISTICS_WINDOW, screenSize.width, screenSize.height);
     }
 
     public void btnPoundClicked(ActionEvent actionEvent) {
+        StatisticsWindowController.currency = CurrencyType.FUNT.getName();
         WindowType.STATISTICS_WINDOW.setTitle("Statystyki Funta");
         WindowHelper.openWindow(WindowType.STATISTICS_WINDOW, screenSize.width, screenSize.height);
     }
@@ -66,17 +70,17 @@ public class MainWindowController {
      */
     public void btnMailClicked(ActionEvent actionEvent) {
 
-            TextInputDialog dialog = new TextInputDialog("Adres email");
-            dialog.setTitle("Wysyłanie email");
-            dialog.setHeaderText("Podaj email:");
-            dialog.setContentText("Email:");
-            Optional<String> result = dialog.showAndWait();
-
-            result.ifPresent(name -> {
-                String encodedString = Base64.getEncoder().encodeToString(name.getBytes());
-                byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
-                String decodedString = new String(decodedBytes);
-                SendEmail.sendEmail(decodedString);
-            });
+//            TextInputDialog dialog = new TextInputDialog("Adres email");
+//            dialog.setTitle("Wysyłanie email");
+//            dialog.setHeaderText("Podaj email:");
+//            dialog.setContentText("Email:");
+//            Optional<String> result = dialog.showAndWait();
+//
+//            result.ifPresent(name -> {
+//                String encodedString = Base64.getEncoder().encodeToString(name.getBytes());
+//                byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
+//                String decodedString = new String(decodedBytes);
+//                SendEmail.sendEmail(decodedString);
+//            });
     }
 }

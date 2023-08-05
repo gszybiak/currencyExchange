@@ -20,6 +20,10 @@ public class MsgHelper {
         show(header, msg, Alert.AlertType.ERROR, "Wystąpił błąd");
     }
 
+    public static void showInfo(String header, String msg) {
+        show(header, msg, Alert.AlertType.INFORMATION, "");
+    }
+
     /**
      * Wyświetla alert na ekranie.
      *
