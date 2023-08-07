@@ -18,7 +18,7 @@
                 </ImageView>
             </graphic>
         </Button>
-        <Label layoutX="1020.0" layoutY="30.0" style="-fx-font-weight: bold" text="Użytkownik:" fx:id="txtUsers" textFill="#000000">
+        <Label layoutX="900.0" layoutY="30.0" style="-fx-font-weight: bold" fx:id="txtUsers" textFill="#000000">
             <font>
                 <Font size="20.0" />
             </font>
@@ -27,18 +27,18 @@
             <Label alignment="CENTER_LEFT" layoutX="50.0" layoutY="600.0" style="-fx-font-size: 20px; -fx-font-weight: bold;" text="Statystyki:" fx:id="txtStatistics" textFill="#000000"/>
             <HBox spacing="10" alignment="CENTER">
                 <Button fx:id="btnEuro" maxHeight="18" prefHeight="18" prefWidth="90" style="-fx-font-size: 16px; -fx-font-weight: bold;" onAction="#btnEuroClicked" mnemonicParsing="false" text="EURO" />
-                <Label  style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)  SUMA:" fx:id="txtInfoPatternEuro" textFill="#000000"/>
-                <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)" fx:id="txtInfoEuro" textFill="#000000"/>
+                <Label  style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)  SUMA:" fx:id="txtInfoPatternEur" textFill="#000000"/>
+                <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)" fx:id="txtInfoEur" textFill="#000000"/>
             </HBox>
             <HBox spacing="10" alignment="CENTER">
                 <Button fx:id="btnDollar" maxHeight="18" prefHeight="18" prefWidth="90" style="-fx-font-size: 16px; -fx-font-weight: bold;" onAction="#btnDollarClicked" mnemonicParsing="false" text="DOLAR" />
-                <Label layoutX="50.0" layoutY="600.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)  SUMA:" fx:id="txtInfoPatternDollar" textFill="#000000"/>
-                <Label layoutX="50.0" layoutY="600.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)" fx:id="txtInfoDollar" textFill="#000000"/>
+                <Label layoutX="50.0" layoutY="600.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)  SUMA:" fx:id="txtInfoPatternUsd" textFill="#000000"/>
+                <Label layoutX="50.0" layoutY="600.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)" fx:id="txtInfoUsd" textFill="#000000"/>
             </HBox>
             <HBox spacing="10" alignment="CENTER">
                 <Button fx:id="btnPound" maxHeight="18" prefHeight="18" prefWidth="90" style="-fx-font-size: 16px; -fx-font-weight: bold;" onAction="#btnPoundClicked" mnemonicParsing="false" text="FUNT" />
-                <Label layoutX="50.0" layoutY="600.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)  SUMA:" fx:id="txtInfoPatternPound" textFill="#000000"/>
-                <Label layoutX="50.0" layoutY="600.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)" fx:id="txtInfoPound" textFill="#000000"/>
+                <Label layoutX="50.0" layoutY="600.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)  SUMA:" fx:id="txtInfoPatternGbp" textFill="#000000"/>
+                <Label layoutX="50.0" layoutY="600.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="(Kupiono/Sprzedano/Bilans)" fx:id="txtInfoGbp" textFill="#000000"/>
             </HBox>
         </VBox>
         <HBox layoutX="920.0" layoutY="305.0" spacing="10" >
