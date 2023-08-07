@@ -1,12 +1,19 @@
 package currencyExchange.controller;
 
+import currencyExchange.database.DatabaseConnection;
+import currencyExchange.database.DatabaseOperationCustomers;
+import currencyExchange.database.DatabaseOperationTransactions;
 import currencyExchange.enums.CurrencyType;
 import currencyExchange.helpers.ApiNbpHelper;
+import currencyExchange.helpers.MsgHelper;
 import currencyExchange.helpers.TypeAndFormatHelper;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+
+import java.sql.Date;
+import java.time.LocalDate;
 
 public class ExchangeWindowController {
 
@@ -57,6 +64,23 @@ public class ExchangeWindowController {
     }
 
     public void btnBuyOrSellClicked(ActionEvent actionEvent) {
+        if(cbCurrency.getValue() == null){
+            MsgHelper.showError("Uzupełnij dane transakcji.", "Proszę o podanie waluty");
+            return;
+        }
 
+        if(txtQuantityCurrency.getText().isBlank()){
+            MsgHelper.showError("Uzupełnij dane transakcji.", "Proszę o podanie ilości");
+            return;
+        }
+        insertTransactionToDatabase();
+    }
+
+    public void insertTransactionToDatabase(){
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        DatabaseOperationTransactions databaseOperationTransactions = new DatabaseOperationTransactions();
+        databaseOperationTransactions.addTransaction(LoginWindowController.customer.getId(), Date.valueOf(LocalDate.now()), Double.parseDouble(txtValueCurrency.getText()),
+                CurrencyType.getNameForKey(cbCurrency.getValue().toString()), buyMode ? "buy" : "sell",  Double.parseDouble(txtCurrencyRate.getText()), databaseConnection.getStatement());
+        databaseConnection.disconnect();
     }
 }

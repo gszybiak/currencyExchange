@@ -1,6 +1,6 @@
 package currencyExchange.database;
 
-import currencyExchange.Customer;
+import currencyExchange.model.Customer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,7 +28,6 @@ public class DatabaseOperationCustomers {
         try {
             String sqlQuery = "SELECT * FROM " + tableName + " where Id = " + customerId;
             ResultSet resultSet = statement.executeQuery(sqlQuery);
-            statement.execute(sqlQuery);
 
             Customer customer = new Customer(resultSet.getInt("ID") ,resultSet.getString("Name"), resultSet.getString("Surname"),
                     resultSet.getString("Email"), resultSet.getString("Password"), resultSet.getString("Address"),
@@ -39,6 +38,28 @@ public class DatabaseOperationCustomers {
 
         } catch (SQLException e) {
             customerLog.error("Błąd podczas pobierania danych klienta", new Exception(e.getMessage()));
+            return null;
+        }
+    }
+
+    public Customer getCustomerToLog(String email, String password,  Statement statement) {
+        String passwordBase64 = Base64.getEncoder().encodeToString(password.getBytes());
+        Customer customer = null;
+        String sqlQuery = "SELECT * FROM " + tableName + " where email = \"" + email + "\" and password = \"" + passwordBase64 + "\" ";
+        try {
+            ResultSet resultSet = statement.executeQuery(sqlQuery);
+            if (resultSet.next()) {
+                customer = new Customer(resultSet.getInt("id"), resultSet.getString("name"),
+                        resultSet.getString("surname"), resultSet.getString("email"),
+                        resultSet.getString("password"), resultSet.getString("address"),
+                        resultSet.getInt("phoneNumber"));
+            }
+            resultSet.close();
+            return customer;
+
+        } catch (SQLException e) {
+
+            customerLog.error("Błąd podczas pobierania danych logowania", new Exception(e.getMessage()));
             return null;
         }
     }

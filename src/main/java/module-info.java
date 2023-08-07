@@ -18,4 +18,6 @@ module currencyExchange {
     exports currencyExchange;
     exports currencyExchange.controller;
     opens currencyExchange.controller to javafx.fxml;
+    exports currencyExchange.model;
+    opens currencyExchange.model to javafx.fxml;
 }

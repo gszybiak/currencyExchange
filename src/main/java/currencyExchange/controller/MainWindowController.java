@@ -1,23 +1,68 @@
 package currencyExchange.controller;
 
-import currencyExchange.email.SendEmail;
+import currencyExchange.database.DatabaseConnection;
+import currencyExchange.database.DatabaseOperationTransactions;
 import currencyExchange.enums.CurrencyType;
 import currencyExchange.enums.WindowType;
 import currencyExchange.helpers.WindowHelper;
+import currencyExchange.model.StatisticEur;
+import currencyExchange.model.StatisticGbp;
+import currencyExchange.model.StatisticUsd;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.awt.*;
-import java.util.Base64;
-import java.util.Optional;
+
 
 public class MainWindowController {
-
+    public Label txtInfoUsd;
+    public Label txtInfoEur;
+    public Label txtInfoGbp;
+    public Label txtUsers;
     public Button btnClose;
     Toolkit toolkit = Toolkit.getDefaultToolkit();
     Dimension screenSize = toolkit.getScreenSize();
+    public static StatisticUsd statisticUsd = null;
+    public static StatisticEur statisticEur = null;
+    public static StatisticGbp statisticGbp = null;
+
+    public void initialize(){
+        txtUsers.setText("Użytkownik: " + LoginWindowController.customer.getName() + " " + LoginWindowController.customer.getSurname());
+        loadStatisticUsd();
+        if(statisticUsd != null)
+            txtInfoUsd.setText(statisticUsd.getBought().toString() + "\"" + statisticUsd.getSold() + "\""
+            + statisticUsd.getBalance());
+        loadStatisticEur();
+        if(statisticEur != null)
+            txtInfoEur.setText(statisticEur.getBought().toString() + "\"" + statisticEur.getSold() + "\""
+                    + statisticEur.getBalance());
+        loadStatisticGbp();
+        if(statisticGbp != null)
+            txtInfoGbp.setText(statisticGbp.getBought().toString() + "\"" + statisticGbp.getSold() + "\""
+                    + statisticGbp.getBalance());
+    }
+
+    public void loadStatisticUsd(){
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        DatabaseOperationTransactions databaseOperationTransactions = new DatabaseOperationTransactions();
+        statisticUsd = databaseOperationTransactions.getStatisticUsdById(LoginWindowController.customer.getId(), databaseConnection.getStatement());
+        databaseConnection.disconnect();
+    }
+    public void loadStatisticEur(){
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        DatabaseOperationTransactions databaseOperationTransactions = new DatabaseOperationTransactions();
+        statisticEur = databaseOperationTransactions.getStatisticEurById(LoginWindowController.customer.getId(), databaseConnection.getStatement());
+        databaseConnection.disconnect();
+    }
+
+    public void loadStatisticGbp(){
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        DatabaseOperationTransactions databaseOperationTransactions = new DatabaseOperationTransactions();
+        statisticGbp = databaseOperationTransactions.getStatisticGbpById(LoginWindowController.customer.getId(), databaseConnection.getStatement());
+        databaseConnection.disconnect();
+    }
 
     public void btnBuyClicked(ActionEvent actionEvent) {
         ExchangeWindowController.buyMode = true;
