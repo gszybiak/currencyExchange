@@ -7,6 +7,7 @@ import currencyExchange.helpers.TypeAndFormatHelper;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.control.TextArea;
+import javafx.stage.Stage;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;

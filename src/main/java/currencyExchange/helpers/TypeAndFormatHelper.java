@@ -1,7 +1,10 @@
 package currencyExchange.helpers;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class TypeAndFormatHelper {
 
@@ -28,5 +31,15 @@ public class TypeAndFormatHelper {
         }
 
         return doubleList;
+    }
+
+    public static String formatDouble(Double number) {
+        if (number == null)
+            return "0.00";
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+        symbols.setDecimalSeparator(',');
+
+        DecimalFormat df = new DecimalFormat("#0.00", symbols);
+        return df.format(number);
     }
 }

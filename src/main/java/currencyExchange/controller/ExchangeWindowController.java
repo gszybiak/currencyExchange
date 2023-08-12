@@ -1,7 +1,6 @@
 package currencyExchange.controller;
 
 import currencyExchange.database.DatabaseConnection;
-import currencyExchange.database.DatabaseOperationCustomers;
 import currencyExchange.database.DatabaseOperationTransactions;
 import currencyExchange.enums.CurrencyType;
 import currencyExchange.helpers.ApiNbpHelper;
@@ -10,7 +9,9 @@ import currencyExchange.helpers.TypeAndFormatHelper;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.sql.Date;
 import java.time.LocalDate;

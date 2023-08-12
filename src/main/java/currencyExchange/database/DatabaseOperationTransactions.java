@@ -1,5 +1,6 @@
 package currencyExchange.database;
 
+import currencyExchange.enums.CurrencyType;
 import currencyExchange.model.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,62 +26,23 @@ public class DatabaseOperationTransactions {
         }
     }
 
-    public StatisticUsd getStatisticUsdById(int userId, Statement statement) {
-        StatisticUsd statisticUsd = null;
-        String sqlQuery = "SELECT (select sum(amount) AS bought FROM " + tableName  + " WHERE TransactionType = \"buy\")," +
-                "(select sum(amount) AS sold FROM " + tableName  + " WHERE TransactionType = \"sold\") FROM " + tableName  + " " +
-                "WHERE transactionType = \"usd\" and id=" + userId;
+    public Statistic getStatisticById(int userId, CurrencyType currencyType, Statement statement) {
+        Statistic statistic = null;
+        String sqlQuery = "SELECT (select sum(amount) FROM " + tableName  + " WHERE TransactionType = \"buy\" and currency = \"" + currencyType.getName() + "\") AS bought ," +
+                "(select sum(amount) FROM " + tableName  + " WHERE TransactionType = \"sell\" and currency = \"" + currencyType.getName() + "\")  AS sold, currency FROM " + tableName  + " " +
+                "WHERE userId= " + userId + " LIMIT 1";
         try {
             ResultSet resultSet = statement.executeQuery(sqlQuery);
             if (resultSet.next()) {
-                statisticUsd = new StatisticUsd(resultSet.getDouble("bought"), resultSet.getDouble("sold"),
-                        Math.abs(resultSet.getDouble("bought") - resultSet.getDouble("bought")));
+                statistic = new Statistic(resultSet.getDouble("bought"), resultSet.getDouble("sold"),
+                        resultSet.getDouble("sold") - resultSet.getDouble("bought"),
+                        currencyType);
             }
             resultSet.close();
-            return statisticUsd;
+            return statistic;
 
         } catch (SQLException e) {
             transactionLog.error("Błąd podczas pobierania danych o statystykach USD", new Exception(e.getMessage()));
-            return null;
-        }
-    }
-
-    public StatisticEur getStatisticEurById(int userId, Statement statement) {
-        StatisticEur statisticEur = null;
-        String sqlQuery = "SELECT (select sum(amount) AS bought FROM " + tableName  + " WHERE TransactionType = \"buy\")," +
-                "(select sum(amount) AS sold FROM " + tableName  + " WHERE TransactionType = \"sold\") FROM " + tableName  + " " +
-                "WHERE transactionType = \"eur\" and id=" + userId;
-        try {
-            ResultSet resultSet = statement.executeQuery(sqlQuery);
-            if (resultSet.next()) {
-                statisticEur = new StatisticEur(resultSet.getDouble("bought"), resultSet.getDouble("sold"),
-                        Math.abs(resultSet.getDouble("bought") - resultSet.getDouble("bought")));
-            }
-            resultSet.close();
-            return statisticEur;
-
-        } catch (SQLException e) {
-            transactionLog.error("Błąd podczas pobierania danych o statystykach EUR", new Exception(e.getMessage()));
-            return null;
-        }
-    }
-
-    public StatisticGbp getStatisticGbpById(int userId, Statement statement) {
-        StatisticGbp statisticGbp = null;
-        String sqlQuery = "SELECT (select sum(amount) AS bought FROM " + tableName  + " WHERE TransactionType = \"buy\")," +
-                "(select sum(amount) AS sold FROM " + tableName  + " WHERE TransactionType = \"sold\") FROM " + tableName  + " " +
-                "WHERE transactionType = \"gbp\" and id=" + userId;
-        try {
-            ResultSet resultSet = statement.executeQuery(sqlQuery);
-            if (resultSet.next()) {
-                statisticGbp = new StatisticGbp(resultSet.getDouble("bought"), resultSet.getDouble("sold"),
-                        Math.abs(resultSet.getDouble("bought") - resultSet.getDouble("bought")));
-            }
-            resultSet.close();
-            return statisticGbp;
-
-        } catch (SQLException e) {
-            transactionLog.error("Błąd podczas pobierania danych o statystykach GBP", new Exception(e.getMessage()));
             return null;
         }
     }
