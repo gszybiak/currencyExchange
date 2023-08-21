@@ -5,19 +5,15 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
 import java.util.Optional;
-
-/**
- * Klasa zawierająca przydatne metody do wyświetlania komunikatów.
- */
 public class MsgHelper {
     /**
-     * Wyświetla komunikat błędu.
+     * Displays an error message.
      *
-     * @param header nagłówek komunikatu do wyświetlenia
-     * @param msg    komunikat do wyświetlenia
+     * @param header The header of the message to display
+     * @param msg message to display
      */
     public static void showError(String header, String msg) {
-        show(header, msg, Alert.AlertType.ERROR, "Wystąpił błąd");
+        show(header, msg, Alert.AlertType.ERROR, "An error occured");
     }
 
     public static void showInfo(String header, String msg) {
@@ -25,12 +21,12 @@ public class MsgHelper {
     }
 
     /**
-     * Wyświetla alert na ekranie.
+     * Displays an alert on the screen.
      *
-     * @param header nagłówek komunikatu do wyświetlenia
-     * @param msg    komunikat do wyświetlenia
-     * @param type   typ alertu
-     * @param title  tytuł okna zawierającego alert
+     * @param header The header of the message to display
+     * @param msg message to display
+     * @param type alert type
+     * @param title title of the window containing the alert
      */
     private static void show(String header, String msg, Alert.AlertType type, String title) {
         Alert alert = new Alert(type);
@@ -39,12 +35,13 @@ public class MsgHelper {
         alert.setContentText(msg);
         alert.showAndWait();
     }
+
     /**
-     * Wyświetla alert z wyborem tak lub nie na ekranie
+     * Displays an alert with a choice of yes or no on the screen
      *
-     * @param header nagłówek komunikatu do wyświetlenia
-     * @param msg    komunikat do wyświetlenia
-     * @param title  tytuł okna zawierającego alert
+     * @param header The header of the message to display
+     * @param msg message to display
+     * @param title title of the window containing the alert
      */
     public static boolean showYesOrNoAlert(String header, String msg, String title, Node node) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

@@ -14,13 +14,18 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.awt.*;
+import static currencyExchange.helpers.WindowHelper.screenSize;
 
 public class LoginWindowController {
+    /* Object logger */
     private static final Logger loginWindowLog = LogManager.getLogger(WindowHelper.class);
+    /* Incorrect login count */
     private int incorrectLoginCount = 0;
+    /* Password */
     public PasswordField txtPassword;
+    /* Login */
     public TextField txtUser;
+    /* Object customer */
     public static Customer customer = null;
 
     public void initialize() {
@@ -32,14 +37,12 @@ public class LoginWindowController {
     }
 
     /**
-     * Metoda sprawdza czy dane logowania są poprawne, jeśli sa to przechodzi do ekranu głównego, jeśli nie to wyświetla
-     * komunikat, jeśli komunikat pokaże się 3 razy okienko logowania się wyłącza
+     * Method checks if the login details are correct, if they are it goes to the main screen, if not it displays it
+     * message, if the message appears 3 times, the login window turns off
      */
     public void btnLoginClicked(ActionEvent actionEvent) {
         String email = txtUser.getText();
         String password = txtPassword.getText();
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        Dimension screenSize = toolkit.getScreenSize();
 
         customer = userValidationAndGetIdUser(email, password);
         if (incorrectLoginCount >= 3) {
@@ -50,12 +53,15 @@ public class LoginWindowController {
             WindowHelper.openWindow(WindowType.MAIN_WINDOW, screenSize.width, screenSize.height);
         }
         else {
-            MsgHelper.showError("Błąd logowania", "Podaj poprawne dane logowania");
-            loginWindowLog.error("Błąd logowania");
+            MsgHelper.showError("Login failed", "Enter valid login details");
+            loginWindowLog.error("Login failed");
             incorrectLoginCount++;
         }
     }
 
+    /**
+     * Method that checks whether there is a user with the entered login data
+     */
     private Customer userValidationAndGetIdUser(String email, String password){
         DatabaseConnection databaseConnection = new DatabaseConnection();
         DatabaseOperationCustomers databaseOperationCustomers = new DatabaseOperationCustomers();

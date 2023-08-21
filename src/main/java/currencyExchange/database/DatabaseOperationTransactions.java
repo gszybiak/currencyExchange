@@ -1,10 +1,12 @@
 package currencyExchange.database;
 
+import currencyExchange.controller.LoginWindowController;
 import currencyExchange.enums.CurrencyType;
 import currencyExchange.model.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,14 +17,14 @@ public class DatabaseOperationTransactions {
     private static final Logger transactionLog = LogManager.getLogger(DatabaseOperationTransactions.class);
     private String tableName = "Transactions";
 
-    public void addTransaction(int userId, Date transactionDate, double amount, String currency, String transactionType, double exchangeRate, Statement statement) {
+    public void addTransaction(int userId, Date transactionDate, BigDecimal amount, String currency, String transactionType, BigDecimal exchangeRate, Statement statement) {
         try {
             String sqlQuery = "INSERT INTO " + tableName  + " (UserID, TransactionDate, Amount, Currency, TransactionType, ExchangeRate) VALUES " +
                     "(" + userId + ", '" + transactionDate + "', " + amount + ", '" + currency + "', '" +
                     transactionType + "', " + exchangeRate + ")";
             statement.execute(sqlQuery);
         } catch (SQLException e) {
-            transactionLog.error("Błąd podczas dodawania nowej transakcji", new Exception(e.getMessage()));
+            transactionLog.error("Error while adding a new transaction", new Exception(e.getMessage()));
         }
     }
 
@@ -34,16 +36,24 @@ public class DatabaseOperationTransactions {
         try {
             ResultSet resultSet = statement.executeQuery(sqlQuery);
             if (resultSet.next()) {
-                statistic = new Statistic(resultSet.getDouble("bought"), resultSet.getDouble("sold"),
-                        resultSet.getDouble("sold") - resultSet.getDouble("bought"),
+                statistic = new Statistic(resultSet.getBigDecimal("bought"), resultSet.getBigDecimal("sold"),
+                        resultSet.getBigDecimal("sold").subtract(resultSet.getBigDecimal("bought")),
                         currencyType);
             }
             resultSet.close();
             return statistic;
 
         } catch (SQLException e) {
-            transactionLog.error("Błąd podczas pobierania danych o statystykach USD", new Exception(e.getMessage()));
+            transactionLog.error("Error fetching USD statistics data", new Exception(e.getMessage()));
             return null;
         }
+    }
+
+    public static Statistic loadStatistics(CurrencyType currencyType){
+        DatabaseConnection databaseConnection = new DatabaseConnection();
+        DatabaseOperationTransactions databaseOperationTransactions = new DatabaseOperationTransactions();
+        Statistic statistic = databaseOperationTransactions.getStatisticById(LoginWindowController.customer.getId(), currencyType.GBP, databaseConnection.getStatement());
+        databaseConnection.disconnect();
+        return statistic;
     }
 }

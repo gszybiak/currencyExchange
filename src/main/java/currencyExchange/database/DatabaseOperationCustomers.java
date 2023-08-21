@@ -21,7 +21,7 @@ public class DatabaseOperationCustomers {
                     address + "', " + phoneNumber + ")";
             statement.execute(sqlQuery);
         } catch (SQLException e) {
-            customerLog.error("Błąd podczas dodawania nowego klienta", new Exception(e.getMessage()));
+            customerLog.error("Error while adding a new client", new Exception(e.getMessage()));
         }
     }
     public Customer getCustomerById(int customerId, Statement statement) {
@@ -37,7 +37,7 @@ public class DatabaseOperationCustomers {
             return customer;
 
         } catch (SQLException e) {
-            customerLog.error("Błąd podczas pobierania danych klienta", new Exception(e.getMessage()));
+            customerLog.error("Error retrieving customer data", new Exception(e.getMessage()));
             return null;
         }
     }
@@ -59,7 +59,7 @@ public class DatabaseOperationCustomers {
 
         } catch (SQLException e) {
 
-            customerLog.error("Błąd podczas pobierania danych logowania", new Exception(e.getMessage()));
+            customerLog.error("Error retrieving login details", new Exception(e.getMessage()));
             return null;
         }
     }

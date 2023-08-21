@@ -1,18 +1,24 @@
 package currencyExchange.controller;
 
 import currencyExchange.email.SendEmail;
+import currencyExchange.enums.WindowType;
 import currencyExchange.helpers.ApiNbpHelper;
 import currencyExchange.helpers.MsgHelper;
 import currencyExchange.helpers.TypeAndFormatHelper;
+import currencyExchange.helpers.WindowHelper;
 import javafx.event.ActionEvent;
-import javafx.scene.control.*;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -20,23 +26,25 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
-import static currencyExchange.helpers.TypeAndFormatHelper.printDoubleList;
+import static currencyExchange.helpers.DataManagementHelper.*;
+import static currencyExchange.helpers.TypeAndFormatHelper.printBigDecimalList;
+import static currencyExchange.helpers.WindowHelper.screenSize;
 
 public class StatisticsWindowController {
 
-    /* Waluta */
+    /* Currency */
     public static String currency;
-    /* Zakres */
+    /* Range */
     public ComboBox cbRange;
-    /* Statystyka */
+    /* Statistics */
     public TextArea txtStatisctics;
-    /* Minimalna */
+    /* Min */
     public CheckBox chbMin;
-    /* Maksymalna */
+    /* Max */
     public CheckBox chbMax;
-    /* Średnia */
+    /* Average */
     public CheckBox chbAvg;
-    /* Dni */
+    /* Days */
     public CheckBox chbDays;
 
     public void initialize(){
@@ -45,8 +53,14 @@ public class StatisticsWindowController {
         chbMax.setOnAction(event -> checkOnlyOneCheckbox(chbMax));
         chbAvg.setOnAction(event -> checkOnlyOneCheckbox(chbAvg));
         chbDays.setOnAction(event -> checkOnlyOneCheckbox(chbDays));
+        ((Stage) chbMin.getScene().getWindow()).setOnCloseRequest((WindowEvent event) -> {
+            WindowHelper.openWindow(WindowType.MAIN_WINDOW, screenSize.height, screenSize.width);
+        });
     }
 
+    /**
+     * Method that sets only one checkbox checked
+     */
     public void checkOnlyOneCheckbox(CheckBox selectedCheckbox){
         if (selectedCheckbox.isSelected()) {
             if (selectedCheckbox != chbMin) chbMin.setSelected(false);
@@ -56,44 +70,42 @@ public class StatisticsWindowController {
         }
     }
 
+    /**
+     * Method that completes statistics data
+     */
     private void setStatistics() {
         Integer countDays = Integer.parseInt(cbRange.getValue().toString());
         switch (countDays) {
             case 1:
-                txtStatisctics.setText(Double.toString(ApiNbpHelper.loadTodayDataFromBank(currency)));
+                txtStatisctics.setText((ApiNbpHelper.loadTodayDataFromBank(currency)).toString());
                 break;
             case 5:
-                txtStatisctics.setText(printDoubleList(ApiNbpHelper.loadRangePeriodDataFromBank(currency, 5)));
+                txtStatisctics.setText(printBigDecimalList(ApiNbpHelper.loadRangePeriodDataFromBank(currency, 5)));
                 break;
             case 10:
-                txtStatisctics.setText(printDoubleList(ApiNbpHelper.loadRangePeriodDataFromBank(currency, 10)));
+                txtStatisctics.setText(printBigDecimalList(ApiNbpHelper.loadRangePeriodDataFromBank(currency, 10)));
                 break;
             case 30:
-                txtStatisctics.setText(printDoubleList(ApiNbpHelper.loadRangePeriodDataFromBank(currency, 30)));
+                txtStatisctics.setText(printBigDecimalList(ApiNbpHelper.loadRangePeriodDataFromBank(currency, 30)));
                 break;
             default:
                 break;
         }
     }
-    public void btnCalculateClicked(ActionEvent actionEvent) {
-
-    }
 
     /**
-     * Metoda przygotowująca dane do użycia
+     * Method to prepare the data for use
      */
     public String prepareData(){
         String textStatistics = txtStatisctics.getText();
-        if(textStatistics.isBlank())
-            return "";
 
-        List<Double> doubleValues = TypeAndFormatHelper.parseStringToDoubleList(textStatistics);
+        List<BigDecimal> bigDecimalValues = TypeAndFormatHelper.parseStringToBigDecimalList(textStatistics);
         if(chbMin.isSelected())
-            return doubleValues.stream().min(Double::compare).orElse(0.0).toString();
+            return bigDecimalValues.stream().min(BigDecimal::compareTo).orElse(BigDecimal.ZERO).toString();
         else if(chbMax.isSelected())
-            return doubleValues.stream().max(Double::compare).orElse(0.0).toString();
+            return bigDecimalValues.stream().max(BigDecimal::compareTo).orElse(BigDecimal.ZERO).toString();
         else if(chbAvg.isSelected())
-            return Double.toString(doubleValues.stream().mapToDouble(Double::doubleValue).average().orElse(0.0));
+            return BigDecimal.valueOf(bigDecimalValues.stream().mapToDouble(BigDecimal::doubleValue).average().orElse(0.0)).toString();
         else if(chbDays.isSelected())
             return textStatistics;
         else
@@ -101,58 +113,33 @@ public class StatisticsWindowController {
     }
 
     /**
-     * Metoda po kliknięciu przycisku "Kopiuj do schowka"
+     * Method after clicking the "Copy to clipboard" button
      */
     public void btnCopyClicked(ActionEvent actionEvent){
-        String textToSave = prepareData();
-        StringSelection selection = new StringSelection(textToSave);
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(selection, selection);
+        copyToClickboard(prepareData());
     }
 
     /**
-     * Metoda po kliknięciu przycisku "Zapisz do pliku"
+     * Method after clicking the "Save to file" button
      */
     public void btnSaveToFileClicked(ActionEvent actionEvent){
         String textStatistics = txtStatisctics.getText();
         if(textStatistics.isBlank()){
-            MsgHelper.showError("Wybierz zakres ", "Brak danych do zapisania.");
+            MsgHelper.showError("Select range", "No data to save.");
             return;
         }
-
-        String textToSave = prepareData();
-        Path filePath = Path.of("C:/Users/Gabriel/Desktop/CurrencyExchange/statistics.txt");
-        try {
-            Files.write(filePath, textToSave.getBytes(), StandardOpenOption.CREATE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        MsgHelper.showInfo("Dane zapisane ", "Ścieżka do pliku:\n" + filePath.toString());
+        saveToFile(prepareData());
     }
 
     /**
-     * Metoda Wyślij maila
+     * Method Send Email
      */
     public void btnMailClicked(ActionEvent actionEvent) {
         String textStatistics = txtStatisctics.getText();
         if(textStatistics.isBlank()){
-            MsgHelper.showError("Wybierz zakres ", "Brak danych do wysłania.");
+            MsgHelper.showError("Select range", "No data to send.");
             return;
         }
-
-        String textToSave = prepareData();
-        TextInputDialog dialog = new TextInputDialog("Adres email");
-        dialog.setTitle("Wysyłanie email");
-        dialog.setHeaderText("Podaj email:");
-        dialog.setContentText("Email:");
-        Optional<String> result = dialog.showAndWait();
-
-        result.ifPresent(name -> {
-            String encodedString = Base64.getEncoder().encodeToString(name.getBytes());
-            byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
-            String decodedString = new String(decodedBytes);
-            SendEmail.sendEmail(decodedString, textToSave);
-        });
+        sendMail(prepareData());
     }
-
 }

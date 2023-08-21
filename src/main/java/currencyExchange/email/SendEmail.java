@@ -25,8 +25,8 @@ public class SendEmail {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(from));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiver));
-            message.setSubject("Statystyka kursu walut");
-            message.setText("Dzień dobry\nZapraszamy do zapoznania się z danymi:\n" + contents + "\nPozdrawiamy!");
+            message.setSubject("Exchange rate statistics");
+            message.setText("Good morning\nPlease read the details:\n" + contents + "\nRegards!");
             Transport.send(message);
 
         } catch (MessagingException e) {

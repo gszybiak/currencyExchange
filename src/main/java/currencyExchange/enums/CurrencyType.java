@@ -1,9 +1,9 @@
 package currencyExchange.enums;
 
 public enum CurrencyType {
-    EURO("eur"),
-    DOLAR("usd"),
-    FUNT("gbp");
+    EUR("eur"),
+    USD("usd"),
+    GBP("gbp");
 
     private final String name;
 

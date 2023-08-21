@@ -31,7 +31,7 @@ public class DatabaseConnection {
             connect();
             this.statement = connection.createStatement();
         } catch (SQLException e) {
-            connectionLog.error("Błąd podczas tworzenia statementu:", new Exception(e.getMessage()));
+            connectionLog.error("Error creating statement:", new Exception(e.getMessage()));
         }
     }
 
@@ -39,7 +39,7 @@ public class DatabaseConnection {
         try {
             connection = DriverManager.getConnection(url, username, password);
         } catch (SQLException e) {
-            connectionLog.error("Błąd podczas łączenia z bazą danych:", new Exception(e.getMessage()));
+            connectionLog.error("Error connecting to the database:", new Exception(e.getMessage()));
         }
     }
 
@@ -48,7 +48,7 @@ public class DatabaseConnection {
             try {
                 connection.close();
             } catch (SQLException e) {
-                connectionLog.error("Błąd podczas zamykania połączenia:", new Exception(e.getMessage()));
+                connectionLog.error("Error closing connection:", new Exception(e.getMessage()));
             }
         }
     }
@@ -65,7 +65,7 @@ public class DatabaseConnection {
             password = properties.getProperty("db.password");
 
         } catch (IOException e) {
-            connectionLog.error("Błąd podczas pobierania danych połączenia do bazy:", new Exception(e.getMessage()));
+            connectionLog.error("Error while downloading connection data to the database:", new Exception(e.getMessage()));
         }
     }
 }

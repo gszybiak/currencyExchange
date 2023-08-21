@@ -15,7 +15,7 @@
     <children>
         <ImageView fitHeight="150.0" fitWidth="400.0" layoutX="550.0" layoutY="100.0">
             <image>
-                <Image url="@kantor.png" />
+                <Image url="@../icons/kantor.png" />
             </image>
         </ImageView>
         <VBox layoutX="550.0" layoutY="305.0" prefWidth="400" spacing="10" alignment="CENTER">
@@ -23,9 +23,9 @@
             <ComboBox fx:id="cbCurrency" prefWidth="400" style="alignment: center" >
                 <items>
                     <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="EURO" />
-                        <String fx:value="DOLAR" />
-                        <String fx:value="FUNT" />
+                        <String fx:value="EUR" />
+                        <String fx:value="USD" />
+                        <String fx:value="GBP" />
                     </FXCollections>
                 </items>
             </ComboBox>

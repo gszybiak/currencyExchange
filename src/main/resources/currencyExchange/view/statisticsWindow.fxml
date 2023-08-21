@@ -12,7 +12,7 @@
     <children>
         <ImageView fitHeight="150.0" fitWidth="400.0" layoutX="550.0" layoutY="100.0">
             <image>
-                <Image url="@kantor.png" />
+                <Image url="@../icons/kantor.png" />
             </image>
         </ImageView>
         <VBox layoutX="550.0" layoutY="305.0" prefWidth="400" spacing="10" alignment="CENTER">
@@ -41,21 +41,21 @@
                         <Button alignment="CENTER_RIGHT" fx:id="btnCopy"  maxHeight="20" prefHeight="20" prefWidth="20" style="-fx-font-size: 20px; -fx-font-weight: bold;" onAction="#btnCopyClicked" mnemonicParsing="false" >
                         <graphic>
                             <ImageView fitHeight="18" fitWidth="18">
-                                <Image url="@copyIcon.png" />
+                                <Image url="@../icons/copyIcon.png" />
                             </ImageView>
                         </graphic>
                         </Button>
                         <Button alignment="CENTER_RIGHT" fx:id="btnSaveToFile"  maxHeight="20" prefHeight="20" prefWidth="20" style="-fx-font-size: 20px; -fx-font-weight: bold;" onAction="#btnSaveToFileClicked" mnemonicParsing="false" >
                             <graphic>
                                 <ImageView fitHeight="18" fitWidth="18">
-                                    <Image url="@saveToFileIcon.png" />
+                                    <Image url="@../icons/saveToFileIcon.png" />
                                 </ImageView>
                             </graphic>
                         </Button>
                         <Button alignment="CENTER_RIGHT" fx:id="btnMail" maxHeight="20" prefHeight="20" prefWidth="20" style="-fx-font-size: 20px; -fx-font-weight: bold;" onAction="#btnMailClicked" mnemonicParsing="false" >
                         <graphic>
                             <ImageView fitHeight="18" fitWidth="18">
-                                <Image url="@iconMail.png" />
+                                <Image url="@../icons/iconMail.png" />
                             </ImageView>
                         </graphic>
                         </Button>

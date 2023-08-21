@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
@@ -16,10 +17,10 @@ import java.util.List;
 public class ApiNbpHelper {
 
     /**
-     * Metoda do pobierania aktualnego kursu waluty
+     * Method for downloading the current exchange rate
      */
-    public static Double loadTodayDataFromBank(String currency) {
-        Double currencyPrice = null;
+    public static BigDecimal loadTodayDataFromBank(String currency) {
+        BigDecimal currencyPrice = null;
         try {
             String apiUrl = "http://api.nbp.pl/api/exchangerates/rates/a/" + currency + "/?format=json";
 
@@ -30,7 +31,7 @@ public class ApiNbpHelper {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 currencyPrice = getOnePriceFromJson(readerResponse(reader));
             } else
-                System.out.println("Błąd podczas pobierania danych. Kod odpowiedzi: " + responseCode);
+                System.out.println("Error downloading data. Response code: " + responseCode);
 
             connection.disconnect();
             return currencyPrice;
@@ -41,10 +42,10 @@ public class ApiNbpHelper {
     }
 
     /**
-     * Metoda do pobierania kursów walut z podanego okresu
+     * Method for downloading exchange rates for a given period
      */
-    public static  List<Double> loadRangePeriodDataFromBank(String currency, int countDays) {
-        List<Double> currencyPrice = new ArrayList<>();
+    public static  List<BigDecimal> loadRangePeriodDataFromBank(String currency, int countDays) {
+        List<BigDecimal> currencyPrice = new ArrayList<>();
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String endDate = currentDate.format(formatter);
@@ -60,7 +61,7 @@ public class ApiNbpHelper {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 currencyPrice = getRangePriceFromJson(readerResponse(reader));
             } else
-                System.out.println("Błąd podczas pobierania danych. Kod odpowiedzi: " + responseCode);
+                System.out.println("Error downloading data. Response code: " + responseCode);
 
             connection.disconnect();
             return currencyPrice;
@@ -71,7 +72,7 @@ public class ApiNbpHelper {
     }
 
     /**
-     * Metoda wysyłająca żądanie do API
+     * method that sends the request to the API
      */
     private static HttpURLConnection request(String apiUrl) throws IOException{
         URL url = new URL(apiUrl);
@@ -81,7 +82,7 @@ public class ApiNbpHelper {
     }
 
     /**
-     * Metoda czytająca odebrane dane od API
+     * method that reads the request from the API
      */
     private static String readerResponse(BufferedReader reader) throws IOException{
         String line;
@@ -94,27 +95,27 @@ public class ApiNbpHelper {
     }
 
     /**
-     * Metoda pobierająca cenę z waluty z JSON
+     * Method that retrieves the price from a currency from JSON
      */
-    private static Double getOnePriceFromJson(String response){
+    private static BigDecimal getOnePriceFromJson(String response){
         JSONObject responseFromBank = new JSONObject(response);
         JSONArray rates = responseFromBank.getJSONArray("rates");
         JSONObject midPrice = rates.getJSONObject(0);
-        return  midPrice.getDouble("mid");
+        return  midPrice.getBigDecimal("mid");
     }
 
     /**
-     * Metoda pobierająca ceny walut z podanego okresu
+     * Method that retrieves currency prices from a given period
      */
-    private static List<Double> getRangePriceFromJson(String response){
-        List<Double> currencyRates = new ArrayList<>();
+    private static List<BigDecimal> getRangePriceFromJson(String response){
+        List<BigDecimal> currencyRates = new ArrayList<>();
         JSONObject responseFromBank = new JSONObject(response);
         JSONArray rates = responseFromBank.getJSONArray("rates");
         JSONObject midPrice = rates.getJSONObject(0);
 
         for (int i = 0; i < rates.length(); i++) {
             JSONObject rateObject = rates.getJSONObject(i);
-            double exchangeRate = rateObject.getDouble("mid");
+            BigDecimal exchangeRate = rateObject.getBigDecimal("mid");
             currencyRates.add(exchangeRate);
         }
 

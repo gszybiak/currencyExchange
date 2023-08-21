@@ -1,8 +1,5 @@
 package currencyExchange.controller;
 
-import currencyExchange.database.DatabaseConnection;
-import currencyExchange.database.DatabaseOperationTransactions;
-import currencyExchange.email.SendEmail;
 import currencyExchange.enums.CurrencyType;
 import currencyExchange.enums.WindowType;
 import currencyExchange.helpers.WindowHelper;
@@ -10,139 +7,123 @@ import currencyExchange.model.Statistic;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
 
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.util.Base64;
-import java.util.Optional;
 
-import static currencyExchange.helpers.TypeAndFormatHelper.formatDouble;
+import java.util.ArrayList;
+import java.util.List;
+
+import static currencyExchange.database.DatabaseOperationTransactions.loadStatistics;
+import static currencyExchange.helpers.DataManagementHelper.copyToClickboard;
+import static currencyExchange.helpers.DataManagementHelper.sendMail;
+import static currencyExchange.helpers.TypeAndFormatHelper.formatBigDecimal;
+import static currencyExchange.helpers.WindowHelper.openBuySellWindow;
+import static currencyExchange.helpers.WindowHelper.openStatisticWindow;
 
 public class MainWindowController {
+    /* Info usd */
     public Label txtInfoUsd;
+    /* Info eur */
     public Label txtInfoEur;
+    /* Info gbp */
     public Label txtInfoGbp;
+    /* Users */
     public Label txtUsers;
+    /* Logout Button */
     public Button btnClose;
-    Toolkit toolkit = Toolkit.getDefaultToolkit();
-    Dimension screenSize = toolkit.getScreenSize();
+    /* Object usd statistic */
     public static Statistic statisticUsd = null;
+    /* Object eur statistic */
     public static Statistic statisticEur = null;
+    /* Object gbp statistic */
     public static Statistic statisticGbp = null;
 
     public void initialize(){
-        txtUsers.setText("Użytkownik: " + LoginWindowController.customer.getName() + " " + LoginWindowController.customer.getSurname());
+        txtUsers.setText("User: " + LoginWindowController.customer.getName() + " " + LoginWindowController.customer.getSurname());
         loadStatistic();
     }
 
+    /**
+     * Method that causes the statistics to be loaded
+     */
     public void loadStatistic(){
-        loadStatisticUsd();
-        if(statisticUsd != null)
-            txtInfoUsd.setText(formatDouble(statisticUsd.getBought()) + " / " + formatDouble(statisticUsd.getSold()) + " / "
-                    + formatDouble(statisticUsd.getBalance()));
-        loadStatisticEur();
-        if(statisticEur != null)
-            txtInfoEur.setText(formatDouble(statisticEur.getBought()) + " / " + formatDouble(statisticEur.getSold()) + " / "
-                    + formatDouble(statisticEur.getBalance()));
-        loadStatisticGbp();
-        if(statisticGbp != null)
-            txtInfoGbp.setText(formatDouble(statisticGbp.getBought()) + " / " + formatDouble(statisticGbp.getSold()) + " / "
-                    + formatDouble(statisticGbp.getBalance()));
+        statisticUsd = loadStatistics(CurrencyType.USD);
+        statisticEur = loadStatistics(CurrencyType.EUR);
+        statisticGbp = loadStatistics(CurrencyType.GBP);
+
+        txtInfoUsd.setText(formatBigDecimal(statisticUsd.getBought()) + " / " + formatBigDecimal(statisticUsd.getSold()) + " / "
+                    + formatBigDecimal(statisticUsd.getBalance()));
+        txtInfoEur.setText(formatBigDecimal(statisticEur.getBought()) + " / " + formatBigDecimal(statisticEur.getSold()) + " / "
+                    + formatBigDecimal(statisticEur.getBalance()));
+        txtInfoGbp.setText(formatBigDecimal(statisticGbp.getBought()) + " / " + formatBigDecimal(statisticGbp.getSold()) + " / "
+                    + formatBigDecimal(statisticGbp.getBalance()));
     }
 
-    public void loadStatisticUsd(){
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        DatabaseOperationTransactions databaseOperationTransactions = new DatabaseOperationTransactions();
-        statisticUsd = databaseOperationTransactions.getStatisticById(LoginWindowController.customer.getId(), CurrencyType.DOLAR, databaseConnection.getStatement());
-        databaseConnection.disconnect();
-    }
-    public void loadStatisticEur(){
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        DatabaseOperationTransactions databaseOperationTransactions = new DatabaseOperationTransactions();
-        statisticEur = databaseOperationTransactions.getStatisticById(LoginWindowController.customer.getId(), CurrencyType.EURO, databaseConnection.getStatement());
-        databaseConnection.disconnect();
-    }
-
-    public void loadStatisticGbp(){
-        DatabaseConnection databaseConnection = new DatabaseConnection();
-        DatabaseOperationTransactions databaseOperationTransactions = new DatabaseOperationTransactions();
-        statisticGbp = databaseOperationTransactions.getStatisticById(LoginWindowController.customer.getId(), CurrencyType.FUNT, databaseConnection.getStatement());
-        databaseConnection.disconnect();
-    }
-
+    /**
+     * Listener after clicking the buy button
+     */
     public void btnBuyClicked(ActionEvent actionEvent) {
-        ExchangeWindowController.buyMode = true;
-        WindowType.EXCHANGE_WINDOW.setTitle("Kup walutę");
-        WindowHelper.openWindow(WindowType.EXCHANGE_WINDOW, screenSize.width, screenSize.height);
+        openBuySellWindow(true, txtUsers);
     }
 
+    /**
+     * Listener after clicking the logout button
+     */
     public void btnLogOut(ActionEvent actionEvent) {
         ((Stage) btnClose.getScene().getWindow()).close();
         WindowHelper.openWindow(WindowType.LOGIN_WINDOW);
     }
 
+    /**
+     * Method going to the sell screen
+     */
     public void btnSellClicked(ActionEvent actionEvent) {
-        ExchangeWindowController.buyMode = false;
-        WindowType.EXCHANGE_WINDOW.setTitle("Sprzedaj walutę");
-        WindowHelper.openWindow(WindowType.EXCHANGE_WINDOW, screenSize.width, screenSize.height);
-    }
-
-    public void btnEuroClicked(ActionEvent actionEvent) {
-        StatisticsWindowController.currency = CurrencyType.EURO.getName();
-        WindowType.STATISTICS_WINDOW.setTitle("Statystyki Euro");
-        WindowHelper.openWindow(WindowType.STATISTICS_WINDOW, screenSize.width, screenSize.height);
-    }
-
-    public void btnDollarClicked(ActionEvent actionEvent) {
-        StatisticsWindowController.currency = CurrencyType.DOLAR.getName();
-        WindowType.STATISTICS_WINDOW.setTitle("Statystyki Dollar");
-        WindowHelper.openWindow(WindowType.STATISTICS_WINDOW, screenSize.width, screenSize.height);
-    }
-
-    public void btnPoundClicked(ActionEvent actionEvent) {
-        StatisticsWindowController.currency = CurrencyType.FUNT.getName();
-        WindowType.STATISTICS_WINDOW.setTitle("Statystyki Funta");
-        WindowHelper.openWindow(WindowType.STATISTICS_WINDOW, screenSize.width, screenSize.height);
+        openBuySellWindow(false, txtUsers);
     }
 
     /**
-     * Metoda po kliknięciu przycisku "Kopiuj do schowka"
+     * Method going to the eur statistics screen
+     */
+    public void btnEuroClicked(ActionEvent actionEvent) {
+        openStatisticWindow(CurrencyType.EUR, txtUsers);
+    }
+
+    /**
+     * Method going to the usd statistics screen
+     */
+    public void btnDollarClicked(ActionEvent actionEvent) {
+        openStatisticWindow(CurrencyType.USD, txtUsers);
+    }
+
+    /**
+     * Method going to the gbp statistics screen
+     */
+    public void btnPoundClicked(ActionEvent actionEvent) {
+        openStatisticWindow(CurrencyType.GBP, txtUsers);
+    }
+
+    /**
+     * Method after clicking the "Copy to clipboard" button
      */
     public void btnCopyClicked(ActionEvent actionEvent){
-
-        String textToSave = prepareData();
-        StringSelection selection = new StringSelection(textToSave);
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(selection, selection);
+        copyToClickboard(prepareData());
     }
 
     /**
-     * Metoda Wyślij maila
+     * Method Send Email
      */
     public void btnMailClicked(ActionEvent actionEvent) {
-        String textToSave = prepareData();
-        TextInputDialog dialog = new TextInputDialog("Adres email");
-        dialog.setTitle("Wysyłanie email");
-        dialog.setHeaderText("Podaj email:");
-        dialog.setContentText("Email:");
-        Optional<String> result = dialog.showAndWait();
-
-        result.ifPresent(name -> {
-            String encodedString = Base64.getEncoder().encodeToString(name.getBytes());
-            byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
-            String decodedString = new String(decodedBytes);
-            SendEmail.sendEmail(decodedString, textToSave);
-        });
+        sendMail(prepareData());
     }
 
+    /**
+     * Method to prepare the data for use
+     */
     private String prepareData(){
-        String textToSave = "Statystyki transakcji: \n";
-        textToSave += "USD(Kupiono/Sprzedano/Bilans): " + txtInfoUsd.getText() + "\n";
-        textToSave += "EURO(Kupiono/Sprzedano/Bilans): " +  txtInfoEur.getText() + "\n";
-        textToSave += "GBP(Kupiono/Sprzedano/Bilans): " +  txtInfoGbp.getText();
+        String textToSave = "Transactions Statistics: \n";
+        textToSave += "USD(Bought/Sold/Balance): " + txtInfoUsd.getText() + "\n";
+        textToSave += "EUR(Bought/Sold/Balance): " +  txtInfoEur.getText() + "\n";
+        textToSave += "GBP(Bought/Sold/Balance): " +  txtInfoGbp.getText();
         return textToSave;
     }
 }

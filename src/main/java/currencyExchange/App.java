@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 public class App extends Application {
 
     /**
-     * Otwiera otwiera ekran logowania
+     * Method opens the login screen
      */
     @Override
     public void start(Stage stage) {
@@ -16,23 +16,9 @@ public class App extends Application {
     }
 
     /**
-     * Metoda startowa aplikacji.
+     * Method application startup
      */
     public static void main(String[] args){
-//        DatabaseConnection databaseConnection = new DatabaseConnection();
-//        DatabaseOperationCustomers databaseOperationCustomers = new DatabaseOperationCustomers();
-//        DatabaseOperationTransactions databaseOperationTransactions = new DatabaseOperationTransactions();
-//
-//        databaseOperationCustomers.addCustomer("Gabriel", "Szybiak", "g_szybiak@wp.pl",
-//                "mario", "Ostrów 404", 733939777 , databaseConnection.getStatement());
-//
-//        databaseOperationTransactions.addTransaction(1, Date.valueOf(LocalDate.now()), 120.0,
-//                "USD", "sell", 4.09, databaseConnection.getStatement());
-//
-//        Customer customer = databaseOperationCustomers.getCustomerById(1, databaseConnection.getStatement());
-//        Transaction transaction = databaseOperationTransactions.getTransactionById(1, databaseConnection.getStatement());
-//
-//        databaseConnection.disconnect();
         launch();
     }
 }
