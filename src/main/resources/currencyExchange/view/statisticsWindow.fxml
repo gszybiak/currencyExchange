@@ -28,7 +28,6 @@
                     </FXCollections>
                 </items>
             </ComboBox>
-            <Button fx:id="btnCalculate" maxHeight="18" prefHeight="18" prefWidth="150" style="-fx-font-size: 16px; -fx-font-weight: bold;" onAction="#btnCalculateClicked" mnemonicParsing="false" text="Przelicz" />
             </HBox>
             <HBox spacing="10" alignment="TOP_LEFT">
                 <TextArea fx:id="txtStatisctics" editable="false" prefWidth="650" minHeight="100" styleClass="text-area-with-scroll"/>

@@ -2,24 +2,19 @@ package currencyExchange.controller;
 
 import currencyExchange.database.DatabaseConnection;
 import currencyExchange.database.DatabaseOperationTransactions;
-import currencyExchange.enums.WindowType;
 import currencyExchange.helpers.ApiNbpHelper;
 import currencyExchange.helpers.MsgHelper;
 import currencyExchange.helpers.TypeAndFormatHelper;
-import currencyExchange.helpers.WindowHelper;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 
 import static currencyExchange.enums.CurrencyType.getNameForKey;
-import static currencyExchange.helpers.WindowHelper.screenSize;
 
 public class ExchangeWindowController {
 
@@ -41,9 +36,6 @@ public class ExchangeWindowController {
         cbCurrency.valueProperty().addListener(x -> setRest());
         txtQuantityCurrency.textProperty().addListener(x -> setValue());
         txtCurrencyRate.textProperty().addListener(x -> setValue());
-        ((Stage) txtCurrencyRate.getScene().getWindow()).setOnCloseRequest((WindowEvent event) -> {
-            WindowHelper.openWindow(WindowType.MAIN_WINDOW, screenSize.width, screenSize.height);
-        });
     }
 
     /**
@@ -80,7 +72,6 @@ public class ExchangeWindowController {
         }
         insertTransactionToDatabase();
     }
-
 
     /**
      * Method that adds transaction information to the database

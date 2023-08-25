@@ -8,14 +8,14 @@ import lombok.Getter;
 public enum WindowType {
 
     /** The main screen of the application */
-    MAIN_WINDOW("mainWindow.fxml", "Currency exchange", 1200, 800),
+    MAIN_WINDOW("view/mainWindow.fxml", "Currency exchange", 1200, 800),
     /** Login window */
-    LOGIN_WINDOW("loginWindow.fxml", "Login", 300, 200),
+    LOGIN_WINDOW("view/loginWindow.fxml", "Login", 300, 200),
 
     /** Statistics window */
-    STATISTICS_WINDOW("statisticsWindow.fxml","Statistics",300,200),
+    STATISTICS_WINDOW("view/statisticsWindow.fxml","Statistics",300,200),
     /** Exchange window */
-    EXCHANGE_WINDOW("exchangeWindow.fxml","Currency exchange",300,200);
+    EXCHANGE_WINDOW("view/exchangeWindow.fxml","Currency exchange",300,200);
 
     private String viewPath;
     private String title;

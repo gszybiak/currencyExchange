@@ -13,6 +13,10 @@ public class DatabaseOperationCustomers {
 
     private static final Logger customerLog = LogManager.getLogger(DatabaseOperationCustomers.class);
     private String tableName = "Customers";
+
+    /**
+     * The method that add Customer
+     */
     public void addCustomer(String name, String surname, String email, String password, String address, int phoneNumber, Statement statement) {
         String passworBase64 = Base64.getEncoder().encodeToString(password.getBytes());
         try {
@@ -24,6 +28,10 @@ public class DatabaseOperationCustomers {
             customerLog.error("Error while adding a new client", new Exception(e.getMessage()));
         }
     }
+
+    /**
+     * The method that get Customer by Id
+     */
     public Customer getCustomerById(int customerId, Statement statement) {
         try {
             String sqlQuery = "SELECT * FROM " + tableName + " where Id = " + customerId;
@@ -42,6 +50,9 @@ public class DatabaseOperationCustomers {
         }
     }
 
+    /**
+     * The method that check if exist that Customer and allow log if exist
+     */
     public Customer getCustomerToLog(String email, String password,  Statement statement) {
         String passwordBase64 = Base64.getEncoder().encodeToString(password.getBytes());
         Customer customer = null;

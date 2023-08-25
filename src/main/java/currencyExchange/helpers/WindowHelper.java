@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -96,6 +97,9 @@ public class WindowHelper {
             stage.setWidth(screenSize.width);
             stage.setHeight(screenSize.height);
             stage.show();
+            stage.setOnCloseRequest((WindowEvent event) -> {
+                WindowHelper.openWindow(WindowType.MAIN_WINDOW, screenSize.width, screenSize.height);
+            });
         } catch (Exception e) {
             MsgHelper.showError(String.format("Error opening windows %s", windowType.getViewPath()), e.getLocalizedMessage());
             windowHelperLog.error(String.format("Error opening windows %s", windowType.getViewPath()), new Exception(e.getMessage()));
@@ -123,6 +127,9 @@ public class WindowHelper {
             stage.setWidth(screenSize.width);
             stage.setHeight(screenSize.height);
             stage.show();
+            stage.setOnCloseRequest((WindowEvent event) -> {
+                WindowHelper.openWindow(WindowType.MAIN_WINDOW, screenSize.width, screenSize.height);
+            });
         } catch (Exception e) {
             MsgHelper.showError(String.format("Error opening windows %s", windowType.getViewPath()), e.getLocalizedMessage());
             windowHelperLog.error(String.format("Error opening windows %s", windowType.getViewPath()), new Exception(e.getMessage()));

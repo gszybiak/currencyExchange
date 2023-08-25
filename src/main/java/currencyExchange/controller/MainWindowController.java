@@ -9,10 +9,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static currencyExchange.database.DatabaseOperationTransactions.loadStatistics;
 import static currencyExchange.helpers.DataManagementHelper.copyToClickboard;
 import static currencyExchange.helpers.DataManagementHelper.sendMail;

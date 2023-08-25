@@ -17,6 +17,9 @@ public class DatabaseOperationTransactions {
     private static final Logger transactionLog = LogManager.getLogger(DatabaseOperationTransactions.class);
     private String tableName = "Transactions";
 
+    /**
+     * The method that add Transaction
+     */
     public void addTransaction(int userId, Date transactionDate, BigDecimal amount, String currency, String transactionType, BigDecimal exchangeRate, Statement statement) {
         try {
             String sqlQuery = "INSERT INTO " + tableName  + " (UserID, TransactionDate, Amount, Currency, TransactionType, ExchangeRate) VALUES " +
@@ -28,10 +31,13 @@ public class DatabaseOperationTransactions {
         }
     }
 
+    /**
+     * The method that get Statisctic by Id
+     */
     public Statistic getStatisticById(int userId, CurrencyType currencyType, Statement statement) {
         Statistic statistic = null;
-        String sqlQuery = "SELECT (select sum(amount) FROM " + tableName  + " WHERE TransactionType = \"buy\" and currency = \"" + currencyType.getName() + "\") AS bought ," +
-                "(select sum(amount) FROM " + tableName  + " WHERE TransactionType = \"sell\" and currency = \"" + currencyType.getName() + "\")  AS sold, currency FROM " + tableName  + " " +
+        String sqlQuery = "SELECT COALESCE((select sum(amount) FROM " + tableName  + " WHERE TransactionType = \"buy\" and currency = \"" + currencyType.getName() + "\"), 0.0) AS bought ," +
+                "COALESCE((select sum(amount) FROM " + tableName  + " WHERE TransactionType = \"sell\" and currency = \"" + currencyType.getName() + "\"), 0.0)  AS sold, currency FROM " + tableName  + " " +
                 "WHERE userId= " + userId + " LIMIT 1";
         try {
             ResultSet resultSet = statement.executeQuery(sqlQuery);
@@ -49,10 +55,13 @@ public class DatabaseOperationTransactions {
         }
     }
 
+    /**
+     * The method that load Data to statictics
+     */
     public static Statistic loadStatistics(CurrencyType currencyType){
         DatabaseConnection databaseConnection = new DatabaseConnection();
         DatabaseOperationTransactions databaseOperationTransactions = new DatabaseOperationTransactions();
-        Statistic statistic = databaseOperationTransactions.getStatisticById(LoginWindowController.customer.getId(), currencyType.GBP, databaseConnection.getStatement());
+        Statistic statistic = databaseOperationTransactions.getStatisticById(LoginWindowController.customer.getId(), currencyType, databaseConnection.getStatement());
         databaseConnection.disconnect();
         return statistic;
     }

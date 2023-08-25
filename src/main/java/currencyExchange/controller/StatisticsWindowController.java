@@ -1,30 +1,20 @@
 package currencyExchange.controller;
 
-import currencyExchange.email.SendEmail;
 import currencyExchange.enums.WindowType;
 import currencyExchange.helpers.ApiNbpHelper;
 import currencyExchange.helpers.MsgHelper;
 import currencyExchange.helpers.TypeAndFormatHelper;
 import currencyExchange.helpers.WindowHelper;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
-import java.util.Base64;
 import java.util.List;
-import java.util.Optional;
 
 import static currencyExchange.helpers.DataManagementHelper.*;
 import static currencyExchange.helpers.TypeAndFormatHelper.printBigDecimalList;
@@ -53,9 +43,6 @@ public class StatisticsWindowController {
         chbMax.setOnAction(event -> checkOnlyOneCheckbox(chbMax));
         chbAvg.setOnAction(event -> checkOnlyOneCheckbox(chbAvg));
         chbDays.setOnAction(event -> checkOnlyOneCheckbox(chbDays));
-        ((Stage) chbMin.getScene().getWindow()).setOnCloseRequest((WindowEvent event) -> {
-            WindowHelper.openWindow(WindowType.MAIN_WINDOW, screenSize.height, screenSize.width);
-        });
     }
 
     /**

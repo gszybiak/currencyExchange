@@ -25,6 +25,9 @@ public class DatabaseConnection {
         return statement;
     }
 
+    /**
+     * The method that call load connection data and connect
+     */
     public DatabaseConnection(){
         try {
             loadConnectionData();
@@ -35,6 +38,9 @@ public class DatabaseConnection {
         }
     }
 
+    /**
+     * The method that connect
+     */
     private void connect() {
         try {
             connection = DriverManager.getConnection(url, username, password);
@@ -43,6 +49,9 @@ public class DatabaseConnection {
         }
     }
 
+    /**
+     * The method that disconnect
+     */
     public void disconnect() {
         if (connection != null) {
             try {
@@ -53,6 +62,9 @@ public class DatabaseConnection {
         }
     }
 
+    /**
+     * The method that loads the connection data
+     */
     private void loadConnectionData(){
         try{
             Properties properties = new Properties();
