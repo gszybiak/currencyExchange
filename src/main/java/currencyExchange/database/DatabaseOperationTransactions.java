@@ -3,6 +3,7 @@ package currencyExchange.database;
 import currencyExchange.controller.LoginWindowController;
 import currencyExchange.enums.CurrencyType;
 import currencyExchange.model.*;
+import currencyExchange.services.LoginService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,33 +13,29 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Base64;
+import java.util.Optional;
 
 public class DatabaseOperationTransactions {
     private static final Logger transactionLog = LogManager.getLogger(DatabaseOperationTransactions.class);
-    private String tableName = "Transactions";
+    private final String tableName = "Transactions";
 
-    /**
-     * The method that add Transaction
-     */
-    public void addTransaction(int userId, Date transactionDate, BigDecimal amount, String currency, String transactionType, BigDecimal exchangeRate, Statement statement) {
+    public void addTransaction(int userId, Date transactionDate, BigDecimal amount, Optional<String> currency, String transactionType, BigDecimal exchangeRate, Statement statement) {
         try {
-            String sqlQuery = "INSERT INTO " + tableName  + " (UserID, TransactionDate, Amount, Currency, TransactionType, ExchangeRate) VALUES " +
-                    "(" + userId + ", '" + transactionDate + "', " + amount + ", '" + currency + "', '" +
-                    transactionType + "', " + exchangeRate + ")";
+            String sqlQuery = String.format("INSERT INTO %s (UserID, TransactionDate, Amount, Currency, TransactionType, ExchangeRate) VALUES (%d, '%s', %f, '%s', '%s', %f)",
+                    tableName, userId, transactionDate, amount, currency, transactionType, exchangeRate);
             statement.execute(sqlQuery);
         } catch (SQLException e) {
             transactionLog.error("Error while adding a new transaction", new Exception(e.getMessage()));
         }
     }
 
-    /**
-     * The method that get Statisctic by Id
-     */
     public Statistic getStatisticById(int userId, CurrencyType currencyType, Statement statement) {
         Statistic statistic = null;
-        String sqlQuery = "SELECT COALESCE((select sum(amount) FROM " + tableName  + " WHERE TransactionType = \"buy\" and currency = \"" + currencyType.getName() + "\"), 0.0) AS bought ," +
-                "COALESCE((select sum(amount) FROM " + tableName  + " WHERE TransactionType = \"sell\" and currency = \"" + currencyType.getName() + "\"), 0.0)  AS sold, currency FROM " + tableName  + " " +
-                "WHERE userId= " + userId + " LIMIT 1";
+        String sqlQuery = String.format("SELECT COALESCE((SELECT SUM(amount) FROM %s WHERE TransactionType = 'buy' AND currency = '%s'), 0.0) AS bought, " +
+                        "COALESCE((SELECT SUM(amount) FROM %s WHERE TransactionType = 'sell' AND currency = '%s'), 0.0) AS sold, currency " +
+                        "FROM %s WHERE userId = %d LIMIT 1",
+                tableName, currencyType.getName(), tableName, currencyType.getName(), tableName, userId);
+
         try {
             ResultSet resultSet = statement.executeQuery(sqlQuery);
             if (resultSet.next()) {
@@ -50,18 +47,15 @@ public class DatabaseOperationTransactions {
             return statistic;
 
         } catch (SQLException e) {
-            transactionLog.error("Error fetching USD statistics data", new Exception(e.getMessage()));
+            transactionLog.error("Error fetching" + currencyType.getName() + " statistics data", new Exception(e.getMessage()));
             return null;
         }
     }
 
-    /**
-     * The method that load Data to statictics
-     */
     public static Statistic loadStatistics(CurrencyType currencyType){
         DatabaseConnection databaseConnection = new DatabaseConnection();
         DatabaseOperationTransactions databaseOperationTransactions = new DatabaseOperationTransactions();
-        Statistic statistic = databaseOperationTransactions.getStatisticById(LoginWindowController.customer.getId(), currencyType, databaseConnection.getStatement());
+        Statistic statistic = databaseOperationTransactions.getStatisticById(LoginService.customer.getId(), currencyType, databaseConnection.getStatement());
         databaseConnection.disconnect();
         return statistic;
     }

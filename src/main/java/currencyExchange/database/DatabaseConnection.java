@@ -1,16 +1,16 @@
 package currencyExchange.database;
 
-import currencyExchange.App;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
+
+
+import static currencyExchange.helpers.PropertiesHelper.loadPropertiesConnection;
 
 public class DatabaseConnection {
     private static final Logger connectionLog = LogManager.getLogger(DatabaseConnection.class);
@@ -25,10 +25,7 @@ public class DatabaseConnection {
         return statement;
     }
 
-    /**
-     * The method that call load connection data and connect
-     */
-    public DatabaseConnection(){
+    public DatabaseConnection() {
         try {
             loadConnectionData();
             connect();
@@ -38,9 +35,6 @@ public class DatabaseConnection {
         }
     }
 
-    /**
-     * The method that connect
-     */
     private void connect() {
         try {
             connection = DriverManager.getConnection(url, username, password);
@@ -49,9 +43,6 @@ public class DatabaseConnection {
         }
     }
 
-    /**
-     * The method that disconnect
-     */
     public void disconnect() {
         if (connection != null) {
             try {
@@ -62,22 +53,12 @@ public class DatabaseConnection {
         }
     }
 
-    /**
-     * The method that loads the connection data
-     */
-    private void loadConnectionData(){
-        try{
-            Properties properties = new Properties();
-
-            InputStream inputStream = App.class.getClassLoader().getResourceAsStream("connection.properties");
-            properties.load(inputStream);
-
+    private void loadConnectionData() {
+        Properties properties = loadPropertiesConnection();
+        if (properties != null) {
             url = properties.getProperty("db.url");
             username = properties.getProperty("db.username");
             password = properties.getProperty("db.password");
-
-        } catch (IOException e) {
-            connectionLog.error("Error while downloading connection data to the database:", new Exception(e.getMessage()));
         }
     }
 }

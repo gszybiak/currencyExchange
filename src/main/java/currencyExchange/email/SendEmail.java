@@ -8,10 +8,15 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
+import static currencyExchange.helpers.PropertiesHelper.loadPropertiesConnection;
+
 public class SendEmail {
-    public static void sendEmail(String receiver, String contents) {
-        String from = "glibrary@op.pl";
-        String password = "Glibrary.123";
+    private static String from;
+    private static String password;
+
+    public static boolean sendEmail(String receiver, String contents) {
+        try {
+        Properties propertiesEmail = loadPropertiesConnection();
 
         Properties properties = System.getProperties();
         properties.put("mail.smtp.auth", "true");
@@ -19,15 +24,16 @@ public class SendEmail {
         properties.put("mail.smtp.port", "465");
         properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 
-        Session session = Session.getInstance(properties, new MyAuthenticator(from, password));
+        Session session = Session.getInstance(properties, new MyAuthenticator(propertiesEmail.getProperty("email.from"),
+                propertiesEmail.getProperty("email.password")));
 
-        try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(from));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiver));
             message.setSubject("Exchange rate statistics");
             message.setText("Good morning\nPlease read the details:\n" + contents + "\nRegards!");
             Transport.send(message);
+            return true;
 
         } catch (MessagingException e) {
             throw new RuntimeException(e);

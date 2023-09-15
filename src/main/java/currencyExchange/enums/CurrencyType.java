@@ -1,5 +1,7 @@
 package currencyExchange.enums;
 
+import java.util.Optional;
+
 public enum CurrencyType {
     EUR("eur"),
     USD("usd"),
@@ -15,12 +17,12 @@ public enum CurrencyType {
         return name;
     }
 
-    public static String getNameForKey(String key) {
+    public static Optional<String> getNameForKey(String key) {
         for (CurrencyType currencyType : CurrencyType.values()) {
             if (currencyType.name().equals(key)) {
-                return currencyType.getName();
+                return Optional.of(currencyType.getName());
             }
         }
-        return null;
+        return Optional.empty();
     }
 }

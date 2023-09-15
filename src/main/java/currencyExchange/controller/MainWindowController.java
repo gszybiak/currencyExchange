@@ -7,14 +7,16 @@ import currencyExchange.model.Statistic;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
+import javafx.util.Pair;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static currencyExchange.database.DatabaseOperationTransactions.loadStatistics;
-import static currencyExchange.helpers.DataManagementHelper.copyToClickboard;
+import static currencyExchange.helpers.DataManagementHelper.copyToClipboard;
 import static currencyExchange.helpers.DataManagementHelper.sendMail;
 import static currencyExchange.helpers.TypeAndFormatHelper.formatBigDecimal;
-import static currencyExchange.helpers.WindowHelper.openBuySellWindow;
-import static currencyExchange.helpers.WindowHelper.openStatisticWindow;
+import static currencyExchange.helpers.WindowHelper.*;
 
 public class MainWindowController {
     /* Info usd */
@@ -39,82 +41,73 @@ public class MainWindowController {
         loadStatistic();
     }
 
-    /**
-     * Method that causes the statistics to be loaded
-     */
-    public void loadStatistic(){
-        statisticUsd = loadStatistics(CurrencyType.USD);
-        statisticEur = loadStatistics(CurrencyType.EUR);
-        statisticGbp = loadStatistics(CurrencyType.GBP);
+//    public void loadStatistic(){
+//        // FIXME GS: srpóbuj użyć List<Pair<Label, CurrencyType>> - będzie czytelniej :)
+//        statisticUsd = loadStatistics(CurrencyType.USD);
+//        statisticEur = loadStatistics(CurrencyType.EUR);
+//        statisticGbp = loadStatistics(CurrencyType.GBP);
+//
+//        txtInfoUsd.setText(formatBigDecimal(statisticUsd.getBought()) + " / " + formatBigDecimal(statisticUsd.getSold()) + " / "
+//                + formatBigDecimal(statisticUsd.getBalance()));
+//        txtInfoEur.setText(formatBigDecimal(statisticEur.getBought()) + " / " + formatBigDecimal(statisticEur.getSold()) + " / "
+//                + formatBigDecimal(statisticEur.getBalance()));
+//        txtInfoGbp.setText(formatBigDecimal(statisticGbp.getBought()) + " / " + formatBigDecimal(statisticGbp.getSold()) + " / "
+//                + formatBigDecimal(statisticGbp.getBalance()));
+//    }
 
-        txtInfoUsd.setText(formatBigDecimal(statisticUsd.getBought()) + " / " + formatBigDecimal(statisticUsd.getSold()) + " / "
-                    + formatBigDecimal(statisticUsd.getBalance()));
-        txtInfoEur.setText(formatBigDecimal(statisticEur.getBought()) + " / " + formatBigDecimal(statisticEur.getSold()) + " / "
-                    + formatBigDecimal(statisticEur.getBalance()));
-        txtInfoGbp.setText(formatBigDecimal(statisticGbp.getBought()) + " / " + formatBigDecimal(statisticGbp.getSold()) + " / "
-                    + formatBigDecimal(statisticGbp.getBalance()));
+    public void loadStatistic(){
+        List<Pair<Label, CurrencyType>> currencyPairs = new ArrayList<>();
+        currencyPairs.add(new Pair<>(txtInfoUsd, CurrencyType.USD));
+        currencyPairs.add(new Pair<>(txtInfoEur, CurrencyType.EUR));
+        currencyPairs.add(new Pair<>(txtInfoGbp, CurrencyType.GBP));
+
+        for (Pair<Label, CurrencyType> pair : currencyPairs) {
+            CurrencyType currencyType = pair.getValue();
+            Statistic statistics = loadStatistics(currencyType);
+            Label label = pair.getKey();
+
+            String text = formatBigDecimal(statistics.getBought()) + " / " +
+                    formatBigDecimal(statistics.getSold()) + " / " +
+                    formatBigDecimal(statistics.getBalance());
+
+            label.setText(text);
+        }
     }
 
-    /**
-     * Listener after clicking the buy button
-     */
     public void btnBuyClicked(ActionEvent actionEvent) {
         openBuySellWindow(true, txtUsers);
     }
 
-    /**
-     * Listener after clicking the logout button
-     */
     public void btnLogOut(ActionEvent actionEvent) {
-        ((Stage) btnClose.getScene().getWindow()).close();
+        closeWindow(btnClose);
         WindowHelper.openWindow(WindowType.LOGIN_WINDOW);
     }
 
-    /**
-     * Method going to the sell screen
-     */
     public void btnSellClicked(ActionEvent actionEvent) {
         openBuySellWindow(false, txtUsers);
     }
 
-    /**
-     * Method going to the eur statistics screen
-     */
     public void btnEuroClicked(ActionEvent actionEvent) {
         openStatisticWindow(CurrencyType.EUR, txtUsers);
     }
 
-    /**
-     * Method going to the usd statistics screen
-     */
     public void btnDollarClicked(ActionEvent actionEvent) {
         openStatisticWindow(CurrencyType.USD, txtUsers);
     }
 
-    /**
-     * Method going to the gbp statistics screen
-     */
     public void btnPoundClicked(ActionEvent actionEvent) {
         openStatisticWindow(CurrencyType.GBP, txtUsers);
     }
 
-    /**
-     * Method after clicking the "Copy to clipboard" button
-     */
     public void btnCopyClicked(ActionEvent actionEvent){
-        copyToClickboard(prepareData());
+        copyToClipboard(prepareData());
     }
 
-    /**
-     * Method Send Email
-     */
     public void btnMailClicked(ActionEvent actionEvent) {
         sendMail(prepareData());
     }
 
-    /**
-     * Method to prepare the data for use
-     */
+
     private String prepareData(){
         String textToSave = "Transactions Statistics: \n";
         textToSave += "USD(Bought/Sold/Balance): " + txtInfoUsd.getText() + "\n";

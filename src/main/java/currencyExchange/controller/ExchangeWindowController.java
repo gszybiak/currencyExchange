@@ -38,17 +38,11 @@ public class ExchangeWindowController {
         txtCurrencyRate.textProperty().addListener(x -> setValue());
     }
 
-    /**
-     * Method that downloads the currency and adds its value
-     */
     private void setRest(){
         String currencyName = cbCurrency.getValue().toString();
         txtCurrencyRate.setText((ApiNbpHelper.loadTodayDataFromBank(getNameForKey(currencyName)).toString()));
     }
 
-    /**
-     * Method that converts the currency exchange value
-     */
     private void setValue(){
         if(!txtCurrencyRate.getText().isBlank() && !txtQuantityCurrency.getText().isBlank()) {
             BigDecimal value = TypeAndFormatHelper.convertToBigDecimalWithFormatter(txtCurrencyRate.getText())
@@ -57,9 +51,6 @@ public class ExchangeWindowController {
         }
     }
 
-    /**
-     * Method that is called when the buy/sell button is clicked
-     */
     public void btnBuyOrSellClicked(ActionEvent actionEvent) {
         if(cbCurrency.getValue() == null){
             MsgHelper.showError("Fill in transaction details.", "Please enter currency");
@@ -73,9 +64,6 @@ public class ExchangeWindowController {
         insertTransactionToDatabase();
     }
 
-    /**
-     * Method that adds transaction information to the database
-     */
     public void insertTransactionToDatabase(){
         DatabaseConnection databaseConnection = new DatabaseConnection();
         DatabaseOperationTransactions databaseOperationTransactions = new DatabaseOperationTransactions();

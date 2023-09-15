@@ -1,29 +1,28 @@
 package currencyExchange.controller;
 
-import currencyExchange.enums.WindowType;
 import currencyExchange.helpers.ApiNbpHelper;
 import currencyExchange.helpers.MsgHelper;
 import currencyExchange.helpers.TypeAndFormatHelper;
-import currencyExchange.helpers.WindowHelper;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
-import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.math.BigDecimal;
+import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
 
 import static currencyExchange.helpers.DataManagementHelper.*;
+import static currencyExchange.helpers.PropertiesHelper.loadPropertiesPath;
 import static currencyExchange.helpers.TypeAndFormatHelper.printBigDecimalList;
-import static currencyExchange.helpers.WindowHelper.screenSize;
 
 public class StatisticsWindowController {
 
     /* Currency */
-    public static String currency;
+    public static Optional<String> currency;
     /* Range */
     public ComboBox cbRange;
     /* Statistics */
@@ -36,53 +35,30 @@ public class StatisticsWindowController {
     public CheckBox chbAvg;
     /* Days */
     public CheckBox chbDays;
+    /* List checkboxes */
+    public List<CheckBox> checkBoxes;
 
     public void initialize(){
         cbRange.valueProperty().addListener(x -> setStatistics());
-        chbMin.setOnAction(event -> checkOnlyOneCheckbox(chbMin));
-        chbMax.setOnAction(event -> checkOnlyOneCheckbox(chbMax));
-        chbAvg.setOnAction(event -> checkOnlyOneCheckbox(chbAvg));
-        chbDays.setOnAction(event -> checkOnlyOneCheckbox(chbDays));
+
+        checkBoxes = Arrays.asList(chbMin, chbMax, chbAvg, chbDays);
+        checkBoxes.forEach((CheckBox checkbox) -> checkbox.setOnAction(event -> checkOnlyOneCheckbox(checkbox)));
     }
 
-    /**
-     * Method that sets only one checkbox checked
-     */
     public void checkOnlyOneCheckbox(CheckBox selectedCheckbox){
-        if (selectedCheckbox.isSelected()) {
-            if (selectedCheckbox != chbMin) chbMin.setSelected(false);
-            if (selectedCheckbox != chbMax) chbMax.setSelected(false);
-            if (selectedCheckbox != chbAvg) chbAvg.setSelected(false);
-            if (selectedCheckbox != chbDays) chbDays.setSelected(false);
-        }
+        checkBoxes.stream()
+                .filter(checkbox -> checkbox != selectedCheckbox && checkbox.isSelected())
+                .forEach(checkbox -> checkbox.setSelected(false));
     }
 
-    /**
-     * Method that completes statistics data
-     */
     private void setStatistics() {
         Integer countDays = Integer.parseInt(cbRange.getValue().toString());
-        switch (countDays) {
-            case 1:
-                txtStatisctics.setText((ApiNbpHelper.loadTodayDataFromBank(currency)).toString());
-                break;
-            case 5:
-                txtStatisctics.setText(printBigDecimalList(ApiNbpHelper.loadRangePeriodDataFromBank(currency, 5)));
-                break;
-            case 10:
-                txtStatisctics.setText(printBigDecimalList(ApiNbpHelper.loadRangePeriodDataFromBank(currency, 10)));
-                break;
-            case 30:
-                txtStatisctics.setText(printBigDecimalList(ApiNbpHelper.loadRangePeriodDataFromBank(currency, 30)));
-                break;
-            default:
-                break;
-        }
+        if(countDays == 1)
+            txtStatisctics.setText((ApiNbpHelper.loadTodayDataFromBank(currency)).toString());
+        else
+            txtStatisctics.setText(printBigDecimalList(ApiNbpHelper.loadRangePeriodDataFromBank(currency, countDays)));
     }
 
-    /**
-     * Method to prepare the data for use
-     */
     public String prepareData(){
         String textStatistics = txtStatisctics.getText();
 
@@ -99,28 +75,24 @@ public class StatisticsWindowController {
             return textStatistics;
     }
 
-    /**
-     * Method after clicking the "Copy to clipboard" button
-     */
     public void btnCopyClicked(ActionEvent actionEvent){
-        copyToClickboard(prepareData());
+        copyToClipboard(prepareData());
     }
 
-    /**
-     * Method after clicking the "Save to file" button
-     */
     public void btnSaveToFileClicked(ActionEvent actionEvent){
         String textStatistics = txtStatisctics.getText();
         if(textStatistics.isBlank()){
             MsgHelper.showError("Select range", "No data to save.");
             return;
         }
-        saveToFile(prepareData());
+        Properties propertiesPath = loadPropertiesPath();
+        Path filePath = Path.of(propertiesPath.getProperty("path"));
+        if(saveToFile(prepareData(), filePath))
+            MsgHelper.showInfo("Data saved", "File path:\n" + filePath.toString());
+        else
+            return;
     }
 
-    /**
-     * Method Send Email
-     */
     public void btnMailClicked(ActionEvent actionEvent) {
         String textStatistics = txtStatisctics.getText();
         if(textStatistics.isBlank()){
