@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Base64;
+import java.util.Locale;
 import java.util.Optional;
 
 public class DatabaseOperationTransactions {
@@ -21,8 +22,9 @@ public class DatabaseOperationTransactions {
 
     public void addTransaction(int userId, Date transactionDate, BigDecimal amount, Optional<String> currency, String transactionType, BigDecimal exchangeRate, Statement statement) {
         try {
+            Locale.setDefault(Locale.US);
             String sqlQuery = String.format("INSERT INTO %s (UserID, TransactionDate, Amount, Currency, TransactionType, ExchangeRate) VALUES (%d, '%s', %f, '%s', '%s', %f)",
-                    tableName, userId, transactionDate, amount, currency, transactionType, exchangeRate);
+                    tableName, userId, transactionDate, amount, currency.get(), transactionType, exchangeRate);
             statement.execute(sqlQuery);
         } catch (SQLException e) {
             transactionLog.error("Error while adding a new transaction", new Exception(e.getMessage()));
