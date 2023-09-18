@@ -23,7 +23,7 @@ public class ApiNbpHelper {
     public static BigDecimal loadTodayDataFromBank(Optional<String> currency) {
         BigDecimal currencyPrice = null;
         try {
-            String apiUrl = "http://api.nbp.pl/api/exchangerates/rates/a/" + currency + "/?format=json";
+            String apiUrl = "http://api.nbp.pl/api/exchangerates/rates/a/" + currency.get() + "/?format=json";
 
             HttpURLConnection connection = prepareConnection(apiUrl);
             int responseCode = connection.getResponseCode();
@@ -50,7 +50,7 @@ public class ApiNbpHelper {
         String startDate = (currentDate.minusDays(countDays).format(formatter));
         try {
             String apiUrl = String.format("http://api.nbp.pl/api/exchangerates/rates/a/%s/%s/%s/?format=json",
-                    currency, startDate, endDate);
+                    currency.get(), startDate, endDate);
 
             HttpURLConnection connection = prepareConnection(apiUrl);
             int responseCode = connection.getResponseCode();

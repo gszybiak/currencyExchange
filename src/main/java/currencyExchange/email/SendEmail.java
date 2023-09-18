@@ -8,7 +8,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
-import static currencyExchange.helpers.PropertiesHelper.loadPropertiesConnection;
+import static currencyExchange.helpers.PropertiesHelper.loadPropertiesEmail;
 
 public class SendEmail {
     private static String from;
@@ -16,7 +16,7 @@ public class SendEmail {
 
     public static boolean sendEmail(String receiver, String contents) {
         try {
-        Properties propertiesEmail = loadPropertiesConnection();
+        Properties propertiesEmail = loadPropertiesEmail();
 
         Properties properties = System.getProperties();
         properties.put("mail.smtp.auth", "true");
@@ -28,7 +28,7 @@ public class SendEmail {
                 propertiesEmail.getProperty("email.password")));
 
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(from));
+            message.setFrom(new InternetAddress(propertiesEmail.getProperty("email.from")));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiver));
             message.setSubject("Exchange rate statistics");
             message.setText("Good morning\nPlease read the details:\n" + contents + "\nRegards!");

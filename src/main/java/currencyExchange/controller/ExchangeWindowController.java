@@ -9,14 +9,22 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.Locale;
 
 import static currencyExchange.enums.CurrencyType.getNameForKey;
 
 public class ExchangeWindowController {
+
+    private static final Logger exchangeControllerLog = LogManager.getLogger(DatabaseOperationTransactions.class);
 
     /* Currency */
     public ComboBox cbCurrency;
@@ -68,7 +76,7 @@ public class ExchangeWindowController {
         DatabaseConnection databaseConnection = new DatabaseConnection();
         DatabaseOperationTransactions databaseOperationTransactions = new DatabaseOperationTransactions();
         databaseOperationTransactions.addTransaction(LoginWindowController.customer.getId(), Date.valueOf(LocalDate.now()), new BigDecimal(txtValueCurrency.getText()),
-                getNameForKey(cbCurrency.getValue().toString()), buyMode ? "buy" : "sell",  new BigDecimal(txtCurrencyRate.getText()), databaseConnection.getStatement());
+                    getNameForKey(cbCurrency.getValue().toString()), buyMode ? "buy" : "sell", new BigDecimal(txtCurrencyRate.getText()), databaseConnection.getStatement());
         databaseConnection.disconnect();
     }
 }
